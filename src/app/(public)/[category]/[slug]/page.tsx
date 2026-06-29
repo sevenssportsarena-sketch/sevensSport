@@ -17,7 +17,7 @@ export async function generateStaticParams() {
       include: { category: true },
       where: { status: 'published' }
     });
-    return posts.map((post) => ({
+    return posts.map((post: any) => ({
       category: post.category.slug,
       slug: post.slug,
     }));
