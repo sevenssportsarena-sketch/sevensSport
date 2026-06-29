@@ -54,7 +54,7 @@ export default async function AdsPage() {
           </div>
         ) : (
           <div className="space-y-4">
-            {ads.map((ad) => (
+            {ads.map((ad: any) => (
               <div
                 key={ad.id}
                 className="bg-card border border-border rounded-xl overflow-hidden"
@@ -82,7 +82,7 @@ export default async function AdsPage() {
                       >
                         {ad.status}
                       </span>
-                      {ad.placements.map((p) => (
+                      {ad.placements.map((p: any) => (
                         <span key={p} className="rounded-full border border-border px-2 py-0.5 text-[10px] font-semibold text-muted-foreground">
                           {PLACEMENT_LABELS[p] ?? p}
                         </span>

@@ -176,7 +176,7 @@ export default async function HomePage() {
               </div>
 
               {/* Stories */}
-              {heroSidePosts.map((post) => (
+              {heroSidePosts.map((post: any) => (
                 <Link
                   key={post.id}
                   href={`/${post.category.slug}/${post.slug}`}
@@ -216,7 +216,7 @@ export default async function HomePage() {
                     { label: "Champions League", href: "/champions-league" },
                     { label: "La Liga", href: "/la-liga" },
                     { label: "MLS", href: "/mls" },
-                  ].map((cat) => (
+                  ].map((cat: any) => (
                     <Link
                       key={cat.href}
                       href={cat.href}
@@ -285,7 +285,7 @@ export default async function HomePage() {
 
         {gridPosts.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {gridPosts.map((news) => (
+            {gridPosts.map((news: any) => (
               <article
                 key={news.id}
                 className="group relative glass rounded-2xl overflow-hidden card-hover"

@@ -54,7 +54,7 @@ export default async function AllNewsPage() {
 
       {allNews.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {allNews.map((news) => (
+          {allNews.map((news: any) => (
             <article key={news.id} className="group relative glass rounded-2xl overflow-hidden card-hover">
               <Link href={`/${news.category.slug}/${news.slug}`} className="block overflow-hidden">
                 <img

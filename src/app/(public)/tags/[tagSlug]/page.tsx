@@ -26,7 +26,7 @@ export async function generateStaticParams() {
     const tags = await prisma.tag.findMany({
       select: { slug: true }
     });
-    return tags.map((t) => ({
+    return tags.map((t: any) => ({
       tagSlug: t.slug,
     }));
   } catch {
@@ -62,8 +62,8 @@ export default async function TagPage({
   }
 
   const tagNews = tagData.post_tags
-    .map(pt => pt.post)
-    .filter(p => p.status === 'published');
+    .map((pt: any) => pt.post)
+    .filter((p: any) => p.status === 'published');
 
   const title = tagData.name;
 
@@ -87,7 +87,7 @@ export default async function TagPage({
 
       {tagNews.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {tagNews.map((news) => (
+          {tagNews.map((news: any) => (
             <article key={news.id} className="group relative flex flex-col space-y-4">
               <Link href={`/${news.category.slug}/${news.slug}`} className="block overflow-hidden rounded-2xl">
                 <img

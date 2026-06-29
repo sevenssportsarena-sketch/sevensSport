@@ -49,7 +49,7 @@ export default function ModerationQueuePage() {
           <div className="bg-card border rounded-xl overflow-hidden shadow-sm">
             {pendingComments.length > 0 ? (
               <div className="divide-y divide-border">
-                {pendingComments.map((comment) => (
+                {pendingComments.map((comment: any) => (
                   <div key={comment.id} className="p-6 flex flex-col sm:flex-row gap-6">
                     <div className="flex-1 space-y-3">
                       <div className="flex items-center justify-between">

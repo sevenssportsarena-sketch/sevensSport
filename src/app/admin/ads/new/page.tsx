@@ -79,7 +79,7 @@ export default function NewAdPage() {
                 { value: "hero_banner", label: "Hero Banner", desc: "Top of home & category pages" },
                 { value: "sidebar",     label: "Sidebar",     desc: "Article sidebar" },
                 { value: "inline_post", label: "Inline Post", desc: "Inside article content" },
-              ].map((p) => (
+              ].map((p: any) => (
                 <label key={p.value} className="flex items-start gap-3 p-3 rounded-lg border border-border hover:border-primary/40 hover:bg-primary/5 cursor-pointer transition-all has-[:checked]:border-primary has-[:checked]:bg-primary/10">
                   <input type="checkbox" name="placements" value={p.value} className="mt-0.5 accent-primary" />
                   <div>

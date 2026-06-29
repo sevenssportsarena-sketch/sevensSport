@@ -26,7 +26,7 @@ export async function generateStaticParams() {
     const categories = await prisma.category.findMany({
       select: { slug: true }
     });
-    return categories.map((c) => ({
+    return categories.map((c: any) => ({
       category: c.slug,
     }));
   } catch {
@@ -80,7 +80,7 @@ export default async function CategoryPage({
 
       {categoryNews.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {categoryNews.map((news) => (
+          {categoryNews.map((news: any) => (
             <article key={news.id} className="group relative glass rounded-2xl overflow-hidden card-hover">
               <Link href={`/${categorySlug}/${news.slug}`} className="block overflow-hidden">
                 <img

@@ -38,7 +38,7 @@ export default async function AdminPostsPage() {
               </tr>
             </thead>
             <tbody className="divide-y divide-border">
-              {posts.map((post) => (
+              {posts.map((post: any) => (
                 <tr key={post.id} className="hover:bg-muted/30 transition-colors">
                   <td className="px-6 py-4 font-medium">{post.title}</td>
                   <td className="px-6 py-4">{post.category.name}</td>
