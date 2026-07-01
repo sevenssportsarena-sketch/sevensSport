@@ -9,10 +9,11 @@ export function getExcerpt(content: string, maxLength: number = 180) {
   try {
     const blocks = JSON.parse(content);
     if (Array.isArray(blocks)) {
-      const textBlocks = blocks
+      let textBlocks = blocks
         .filter((b: any) => b.type === "paragraph" || b.type === "heading" || b.type === "quote")
         .map((b: any) => b.content)
         .join(" ");
+      textBlocks = textBlocks.replace(/<[^>]*>?/gm, "");
       return textBlocks.length > maxLength ? textBlocks.substring(0, maxLength) + "..." : textBlocks;
     }
   } catch (e) {
