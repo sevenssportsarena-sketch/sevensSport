@@ -17,10 +17,13 @@ export default async function AdminLayout({
     // Graceful fallback
   }
 
+  if (!user) {
+    redirect("/admin/login");
+  }
+
   return (
     <div className="min-h-screen bg-muted/30 flex">
-      {user && (
-        <aside className="w-64 border-r bg-card h-screen sticky top-0 flex flex-col hidden md:flex">
+      <aside className="w-64 border-r bg-card h-screen sticky top-0 flex flex-col hidden md:flex">
           <div className="h-16 flex items-center px-6 border-b">
             <ShieldCheck className="h-6 w-6 text-primary mr-2" />
             <span className="font-bold tracking-tight text-lg">Admin Panel</span>
@@ -70,7 +73,6 @@ export default async function AdminLayout({
             </form>
           </div>
         </aside>
-      )}
       <main className="flex-1 flex flex-col min-h-screen">
         {children}
       </main>
