@@ -5,6 +5,8 @@ import { Trophy, Search, Menu, Zap, X } from "lucide-react";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { useState } from "react";
 
+import { useRouter } from "next/navigation";
+
 const navLinks = [
   { href: "/european-football", label: "European Football" },
   { href: "/nigerian-football", label: "Nigerian Football" },
@@ -13,6 +15,16 @@ const navLinks = [
 
 export function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const router = useRouter();
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      router.push(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
+      setSearchQuery("");
+    }
+  };
 
   return (
     <header className="sticky top-0 z-50 w-full bg-background/95 backdrop-blur-md supports-[backdrop-filter]:bg-background/80 border-b border-border shadow-sm">
@@ -39,11 +51,17 @@ export function Navbar() {
           </nav>
         </div>
         <div className="flex items-center gap-2">
+          <form onSubmit={handleSearch} className="hidden sm:flex items-center relative transition-all">
+            <Search className="absolute left-2.5 h-4 w-4 text-muted-foreground" />
+            <input 
+              type="text" 
+              placeholder="Search..." 
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="h-9 pl-9 pr-4 rounded-lg bg-background border border-border text-sm focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all w-32 md:w-48 focus:w-40 md:focus:w-64 placeholder:text-muted-foreground"
+            />
+          </form>
           <ThemeToggle />
-          <button className="h-9 w-9 rounded-lg flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-white/5 transition-all">
-            <Search className="h-4.5 w-4.5" />
-            <span className="sr-only">Search</span>
-          </button>
           <Link
             href="/admin/login"
             className="hidden md:inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold rounded-lg border border-border hover:bg-white/5 transition-all"

@@ -1,7 +1,17 @@
 import { signup } from "@/app/actions/auth";
 import { Trophy, ShieldAlert, UserPlus } from "lucide-react";
+import prisma from "@/lib/prisma";
+import { redirect } from "next/navigation";
 
-export default function RegisterPage() {
+export default async function RegisterPage() {
+  const canRegisterSetting = await prisma.appSetting.findUnique({
+    where: { key: "canRegister" }
+  });
+
+  if (!canRegisterSetting || canRegisterSetting.value !== "true") {
+    redirect("/");
+  }
+
   return (
     <div className="flex min-h-screen flex-col justify-center items-center p-4">
       <div className="w-full max-w-md bg-card border shadow-xl rounded-2xl overflow-hidden">

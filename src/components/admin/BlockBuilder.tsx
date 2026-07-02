@@ -118,7 +118,7 @@ export default function BlockBuilder({ name, defaultValue }: BlockBuilderProps) 
               <select
                 value={block.type}
                 onChange={(e) => updateBlock(block.id, { type: e.target.value as BlockType })}
-                className="bg-accent/50 hover:bg-accent border border-border rounded-lg text-xs py-1 px-2 outline-none transition-colors"
+                className="hidden md:block bg-accent/50 hover:bg-accent border border-border rounded-lg text-xs py-1 px-2 outline-none transition-colors"
               >
                 <option value="paragraph">Paragraph</option>
                 <option value="heading">Heading</option>
@@ -218,9 +218,9 @@ export default function BlockBuilder({ name, defaultValue }: BlockBuilderProps) 
               <div className="flex items-center gap-1 bg-card border border-border shadow-md rounded-full px-2 py-1">
                 <span className="text-xs font-semibold text-muted-foreground mr-1 px-1"><Plus className="h-3 w-3 inline" /> Add</span>
                 <button type="button" onClick={() => addBlock("paragraph", index)} className="p-1.5 hover:bg-accent rounded-full text-muted-foreground hover:text-foreground transition-colors" title="Paragraph"><Type className="h-4 w-4" /></button>
-                <button type="button" onClick={() => addBlock("heading", index)} className="p-1.5 hover:bg-accent rounded-full text-muted-foreground hover:text-foreground transition-colors" title="Heading"><Heading className="h-4 w-4" /></button>
-                <button type="button" onClick={() => addBlock("image", index)} className="p-1.5 hover:bg-accent rounded-full text-muted-foreground hover:text-foreground transition-colors" title="Image"><ImageIcon className="h-4 w-4" /></button>
-                <button type="button" onClick={() => addBlock("quote", index)} className="p-1.5 hover:bg-accent rounded-full text-muted-foreground hover:text-foreground transition-colors" title="Quote"><Quote className="h-4 w-4" /></button>
+                <button type="button" onClick={() => addBlock("heading", index)} className="hidden md:block p-1.5 hover:bg-accent rounded-full text-muted-foreground hover:text-foreground transition-colors" title="Heading"><Heading className="h-4 w-4" /></button>
+                <button type="button" onClick={() => addBlock("image", index)} className="hidden md:block p-1.5 hover:bg-accent rounded-full text-muted-foreground hover:text-foreground transition-colors" title="Image"><ImageIcon className="h-4 w-4" /></button>
+                <button type="button" onClick={() => addBlock("quote", index)} className="hidden md:block p-1.5 hover:bg-accent rounded-full text-muted-foreground hover:text-foreground transition-colors" title="Quote"><Quote className="h-4 w-4" /></button>
               </div>
             </div>
           </div>

@@ -141,3 +141,9 @@ enum AdEventType {
   impression
   click
 }
+
+model AppSetting {
+  id    String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  key   String @unique
+  value String
+}
