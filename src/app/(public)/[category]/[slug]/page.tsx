@@ -156,6 +156,21 @@ export default async function ArticlePage({
             <AdSlot placement="inline_post" />
           </div>
 
+          {/* Mobile Interactions */}
+          <div className="lg:hidden mt-8 pt-8 border-t border-border flex flex-col sm:flex-row items-center gap-6 justify-center">
+            <ReactionModule 
+              postId={post.id} 
+              initialCounts={{
+                like: post.reactions.filter((r: any) => r.type === "like").length,
+                fire: post.reactions.filter((r: any) => r.type === "fire").length,
+                goal: post.reactions.filter((r: any) => r.type === "goal").length,
+                shock: post.reactions.filter((r: any) => r.type === "shock").length,
+              }}
+            />
+            <div className="hidden sm:block w-px h-10 bg-border" />
+            <ShareButton title={post.title} />
+          </div>
+
           {/* Tags */}
           {post.post_tags.length > 0 && (
             <div className="mt-12 pt-8 border-t border-border flex flex-wrap items-center gap-2">

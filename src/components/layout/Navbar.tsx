@@ -62,13 +62,6 @@ export function Navbar() {
             />
           </form>
           <ThemeToggle />
-          <Link
-            href="/admin/login"
-            className="hidden md:inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold rounded-lg border border-border hover:bg-white/5 transition-all"
-          >
-            <Zap className="h-4 w-4 text-primary" />
-            Dashboard
-          </Link>
           <button 
             className="md:hidden h-9 w-9 rounded-lg flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-white/5 transition-all"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
@@ -95,18 +88,8 @@ export function Navbar() {
                 </Link>
               ))}
             </nav>
-            <div className="pt-3 border-t border-border">
-              <Link
-                href="/admin/login"
-                className="flex items-center gap-2 px-3 py-2 text-base font-semibold rounded-lg text-foreground hover:bg-white/5 transition-all"
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                <Zap className="h-5 w-5 text-primary" />
-                Dashboard
-              </Link>
             </div>
           </div>
-        </div>
       )}
     </header>
   );

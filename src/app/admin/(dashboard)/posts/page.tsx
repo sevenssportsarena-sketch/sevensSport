@@ -6,7 +6,10 @@ import { deletePost } from "@/app/actions/posts";
 export default async function AdminPostsPage() {
   const posts = await prisma.post.findMany({
     orderBy: { created_at: "desc" },
-    include: { category: true },
+    include: { 
+      category: true,
+      _count: { select: { comments: true, reactions: true } }
+    },
   });
 
   return (
@@ -33,6 +36,7 @@ export default async function AdminPostsPage() {
                 <th className="px-6 py-4 font-medium">Title</th>
                 <th className="px-6 py-4 font-medium">Category</th>
                 <th className="px-6 py-4 font-medium">Status</th>
+                <th className="px-6 py-4 font-medium">Stats</th>
                 <th className="px-6 py-4 font-medium">Date</th>
                 <th className="px-6 py-4 font-medium text-right">Actions</th>
               </tr>
@@ -46,6 +50,11 @@ export default async function AdminPostsPage() {
                     <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${post.status === 'published' ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'}`}>
                       {post.status}
                     </span>
+                  </td>
+                  <td className="px-6 py-4 text-xs text-muted-foreground space-y-1">
+                    <div>👁 {post.views} views</div>
+                    <div>💬 {post._count?.comments || 0} comments</div>
+                    <div>🔥 {post._count?.reactions || 0} reactions</div>
                   </td>
                   <td className="px-6 py-4 text-muted-foreground">
                     {new Date(post.created_at).toLocaleDateString()}

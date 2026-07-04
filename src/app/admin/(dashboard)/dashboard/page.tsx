@@ -9,6 +9,17 @@ export default async function AdminDashboard() {
 
   const allPostsCount = await prisma.post.count();
 
+  const totalViewsResult = await prisma.post.aggregate({
+    _sum: { views: true }
+  });
+  const totalViews = totalViewsResult._sum.views || 0;
+
+  const mostViewedPost = await prisma.post.findFirst({
+    where: { status: 'published' },
+    orderBy: { views: 'desc' },
+    select: { title: true, views: true, slug: true }
+  });
+
   return (
     <div className="p-8 space-y-8">
       <div>
@@ -19,15 +30,14 @@ export default async function AdminDashboard() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <div className="bg-card border rounded-xl p-6 shadow-sm">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="font-semibold text-muted-foreground text-sm">Total Views (Dummy)</h3>
+            <h3 className="font-semibold text-muted-foreground text-sm">Total Views</h3>
             <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center">
               <Users className="h-5 w-5 text-primary" />
             </div>
           </div>
-          <div className="text-3xl font-bold">124.5K</div>
-          <div className="flex items-center mt-2 text-sm text-green-500 font-medium">
-            <TrendingUp className="h-4 w-4 mr-1" />
-            +14% this week
+          <div className="text-3xl font-bold">{totalViews.toLocaleString()}</div>
+          <div className="flex items-center mt-2 text-sm text-muted-foreground font-medium">
+            Across all posts
           </div>
         </div>
 
@@ -44,32 +54,23 @@ export default async function AdminDashboard() {
           </div>
         </div>
 
-        <div className="bg-card border rounded-xl p-6 shadow-sm">
+        <div className="bg-card border rounded-xl p-6 shadow-sm lg:col-span-2">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="font-semibold text-muted-foreground text-sm">Ad Impressions (Dummy)</h3>
+            <h3 className="font-semibold text-muted-foreground text-sm">Most Viewed Post</h3>
             <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center">
-              <BarChart3 className="h-5 w-5 text-primary" />
+              <TrendingUp className="h-5 w-5 text-primary" />
             </div>
           </div>
-          <div className="text-3xl font-bold">892.1K</div>
-          <div className="flex items-center mt-2 text-sm text-green-500 font-medium">
-            <TrendingUp className="h-4 w-4 mr-1" />
-            +22% this week
-          </div>
-        </div>
-
-        <div className="bg-card border rounded-xl p-6 shadow-sm">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="font-semibold text-muted-foreground text-sm">Ad Clicks (Dummy)</h3>
-            <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center">
-              <MousePointerClick className="h-5 w-5 text-primary" />
-            </div>
-          </div>
-          <div className="text-3xl font-bold">14.2K</div>
-          <div className="flex items-center mt-2 text-sm text-red-500 font-medium">
-            <TrendingUp className="h-4 w-4 mr-1 rotate-180" />
-            -2% this week
-          </div>
+          {mostViewedPost ? (
+            <>
+              <div className="text-xl font-bold line-clamp-1">{mostViewedPost.title}</div>
+              <div className="flex items-center mt-2 text-sm text-green-500 font-medium">
+                {mostViewedPost.views.toLocaleString()} views
+              </div>
+            </>
+          ) : (
+            <div className="text-muted-foreground">No posts found</div>
+          )}
         </div>
       </div>
 
