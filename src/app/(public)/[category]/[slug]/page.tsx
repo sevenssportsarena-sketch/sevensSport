@@ -61,6 +61,21 @@ export default async function ArticlePage({
   return (
     <article className="min-h-screen">
       <ViewTracker postId={post.id} />
+      {/* ── Fixed mobile interaction strip ─────────────────────── */}
+      <div className="lg:hidden fixed left-0 top-1/2 -translate-y-1/2 z-40 flex flex-col items-center gap-1.5 py-3 px-1.5 bg-background/90 backdrop-blur-md border border-border/60 rounded-r-2xl shadow-xl">
+        <ReactionModule
+          postId={post.id}
+          mobile
+          initialCounts={{
+            like: post.reactions.filter((r: any) => r.type === "like").length,
+            fire: post.reactions.filter((r: any) => r.type === "fire").length,
+            goal: post.reactions.filter((r: any) => r.type === "goal").length,
+            shock: post.reactions.filter((r: any) => r.type === "shock").length,
+          }}
+        />
+        <div className="w-full h-px bg-border/60 my-0.5" />
+        <ShareButton title={post.title} mobile />
+      </div>
       
       {/* ── Cinematic Header ─────────────────────────────── */}
       <header className="relative w-full min-h-[60vh]">
@@ -116,7 +131,7 @@ export default async function ArticlePage({
       </header>
 
       {/* ── Article Body ─────────────────────────────────── */}
-      <div className="container mx-auto max-w-4xl px-4 py-16 sm:px-6 lg:px-8 flex flex-col lg:flex-row gap-12">
+      <div className="container mx-auto max-w-4xl pl-14 pr-4 sm:pl-6 sm:pr-6 lg:px-8 py-16 flex flex-col lg:flex-row gap-12">
         
         {/* Sticky Interaction Sidebar */}
         <div className="hidden lg:block sticky top-24 h-fit pr-8">
@@ -156,20 +171,7 @@ export default async function ArticlePage({
             <AdSlot placement="inline_post" />
           </div>
 
-          {/* Mobile Interactions */}
-          <div className="lg:hidden mt-8 pt-8 border-t border-border flex flex-col sm:flex-row items-center gap-6 justify-center">
-            <ReactionModule 
-              postId={post.id} 
-              initialCounts={{
-                like: post.reactions.filter((r: any) => r.type === "like").length,
-                fire: post.reactions.filter((r: any) => r.type === "fire").length,
-                goal: post.reactions.filter((r: any) => r.type === "goal").length,
-                shock: post.reactions.filter((r: any) => r.type === "shock").length,
-              }}
-            />
-            <div className="hidden sm:block w-px h-10 bg-border" />
-            <ShareButton title={post.title} />
-          </div>
+
 
           {/* Tags */}
           {post.post_tags.length > 0 && (
