@@ -42,7 +42,9 @@ export default async function AdminLayout({
       <MobileAdminNav userEmail={user?.email || ""} signOutNode={signOutNode} />
       <aside className="w-64 border-r bg-card h-screen sticky top-0 flex-col hidden md:flex">
           <div className="h-16 flex items-center px-6 border-b">
-            <ShieldCheck className="h-6 w-6 text-primary mr-2" />
+            <div className="h-6 w-6 rounded-md overflow-hidden mr-2">
+              <img src="/logo.jpeg" alt="Logo" className="w-full h-full object-cover" />
+            </div>
             <span className="font-bold tracking-tight text-lg">Admin Panel</span>
           </div>
           <nav className="flex-1 p-4 space-y-1">

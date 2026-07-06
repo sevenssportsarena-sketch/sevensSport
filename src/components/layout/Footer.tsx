@@ -12,8 +12,8 @@ export function Footer() {
           {/* Brand */}
           <div className="md:col-span-4 space-y-5">
             <Link href="/" className="flex items-center gap-2.5 group">
-              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary glow-primary">
-                <Trophy className="h-5 w-5 text-primary-foreground" />
+              <div className="flex h-9 w-9 items-center justify-center rounded-xl overflow-hidden">
+                <img src="/logo.jpeg" alt="SevensArena Logo" className="w-full h-full object-cover" />
               </div>
               <span className="font-extrabold tracking-tight text-xl">
                 Sevens<span className="gradient-text">Arena</span>

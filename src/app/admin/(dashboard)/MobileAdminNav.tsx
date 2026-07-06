@@ -20,7 +20,9 @@ export default function MobileAdminNav({ userEmail, signOutNode }: { userEmail: 
   return (
     <div className="md:hidden bg-card border-b p-4 flex items-center justify-between sticky top-0 z-50">
       <div className="flex items-center">
-        <ShieldCheck className="h-6 w-6 text-primary mr-2" />
+        <div className="h-6 w-6 rounded-md overflow-hidden mr-2">
+          <img src="/logo.jpeg" alt="Logo" className="w-full h-full object-cover" />
+        </div>
         <span className="font-bold tracking-tight text-lg">Admin</span>
       </div>
       <button onClick={() => setIsOpen(!isOpen)} className="p-2">

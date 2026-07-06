@@ -31,8 +31,8 @@ export function Navbar() {
       <div className="container mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         <div className="flex items-center gap-8">
           <Link href="/" className="flex items-center gap-2.5 group">
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary glow-primary transition-all duration-300 group-hover:scale-110">
-              <Trophy className="h-5 w-5 text-primary-foreground" />
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl overflow-hidden transition-all duration-300 group-hover:scale-110">
+              <img src="/logo.jpeg" alt="SevensArena Logo" className="w-full h-full object-cover" />
             </div>
             <span className="font-extrabold tracking-tight text-xl">
               Sevens<span className="gradient-text">Arena</span>

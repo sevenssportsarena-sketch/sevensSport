@@ -51,82 +51,82 @@
 /* ── Dark-first sports theme ─────────────────────────────────── */
 
 :root {
-  /* Base – deep dark with a subtle blue undertone */
-  --background: oklch(0.13 0.012 260);
-  --foreground: oklch(0.96 0.005 260);
+  /* Base – deep pure black for premium feel */
+  --background: oklch(0.12 0 0);
+  --foreground: oklch(0.98 0 0);
 
   /* Cards – slightly lifted from bg */
-  --card: oklch(0.17 0.014 260);
-  --card-foreground: oklch(0.96 0.005 260);
+  --card: oklch(0.16 0 0);
+  --card-foreground: oklch(0.98 0 0);
 
   /* Popover */
-  --popover: oklch(0.19 0.014 260);
-  --popover-foreground: oklch(0.96 0.005 260);
+  --popover: oklch(0.16 0 0);
+  --popover-foreground: oklch(0.98 0 0);
 
-  /* Primary – vibrant electric green (energetic sports feel) */
-  --primary: oklch(0.72 0.19 145);
-  --primary-foreground: oklch(0.13 0.012 260);
+  /* Primary – rich premium gold */
+  --primary: oklch(0.82 0.16 85);
+  --primary-foreground: oklch(0.12 0 0);
 
-  /* Secondary – subtle cool surface */
-  --secondary: oklch(0.22 0.016 260);
-  --secondary-foreground: oklch(0.88 0.005 260);
+  /* Secondary – dark surface */
+  --secondary: oklch(0.22 0 0);
+  --secondary-foreground: oklch(0.90 0 0);
 
   /* Muted */
-  --muted: oklch(0.22 0.012 260);
-  --muted-foreground: oklch(0.60 0.012 260);
+  --muted: oklch(0.22 0 0);
+  --muted-foreground: oklch(0.65 0 0);
 
-  /* Accent – warm amber glow */
-  --accent: oklch(0.75 0.16 75);
-  --accent-foreground: oklch(0.13 0.012 260);
+  /* Accent – lighter gold glow */
+  --accent: oklch(0.88 0.12 85);
+  --accent-foreground: oklch(0.12 0 0);
 
   /* Destructive */
   --destructive: oklch(0.65 0.22 25);
 
   /* Borders – subtle glass edges */
-  --border: oklch(1 0 0 / 8%);
-  --input: oklch(1 0 0 / 12%);
-  --ring: oklch(0.72 0.19 145);
+  --border: oklch(1 0 0 / 12%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.82 0.16 85);
 
-  /* Charts – vibrant spectrum */
-  --chart-1: oklch(0.72 0.19 145);
-  --chart-2: oklch(0.75 0.16 75);
-  --chart-3: oklch(0.65 0.20 280);
-  --chart-4: oklch(0.70 0.18 200);
+  /* Charts – gold spectrum */
+  --chart-1: oklch(0.82 0.16 85);
+  --chart-2: oklch(0.75 0.14 75);
+  --chart-3: oklch(0.65 0.12 65);
+  --chart-4: oklch(0.88 0.12 85);
   --chart-5: oklch(0.65 0.22 25);
 
   --radius: 0.75rem;
 
   /* Sidebar */
-  --sidebar: oklch(0.15 0.014 260);
-  --sidebar-foreground: oklch(0.96 0.005 260);
-  --sidebar-primary: oklch(0.72 0.19 145);
-  --sidebar-primary-foreground: oklch(0.13 0.012 260);
-  --sidebar-accent: oklch(0.22 0.016 260);
-  --sidebar-accent-foreground: oklch(0.96 0.005 260);
-  --sidebar-border: oklch(1 0 0 / 8%);
-  --sidebar-ring: oklch(0.72 0.19 145);
+  --sidebar: oklch(0.14 0 0);
+  --sidebar-foreground: oklch(0.98 0 0);
+  --sidebar-primary: oklch(0.82 0.16 85);
+  --sidebar-primary-foreground: oklch(0.12 0 0);
+  --sidebar-accent: oklch(0.22 0 0);
+  --sidebar-accent-foreground: oklch(0.98 0 0);
+  --sidebar-border: oklch(1 0 0 / 12%);
+  --sidebar-ring: oklch(0.82 0.16 85);
 }
 
-/* Optional light-mode override (unused by default – dark first) */
+/* Light mode - white background with black/gold theme */
 .light {
   --background: oklch(0.985 0 0);
-  --foreground: oklch(0.145 0 0);
+  --foreground: oklch(0.12 0 0);
   --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
+  --card-foreground: oklch(0.12 0 0);
   --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.52 0.19 145);
+  --popover-foreground: oklch(0.12 0 0);
+  --primary: oklch(0.75 0.16 85); /* Slightly darker gold for light mode text contrast */
   --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
+  --secondary: oklch(0.95 0 0);
+  --secondary-foreground: oklch(0.20 0 0);
+  --muted: oklch(0.95 0 0);
   --muted-foreground: oklch(0.45 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
+  --accent: oklch(0.82 0.16 85);
+  --accent-foreground: oklch(0.12 0 0);
   --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.92 0 0);
-  --input: oklch(0.92 0 0);
-  --ring: oklch(0.52 0.19 145);
+  --border: oklch(0.85 0 0);
+  --input: oklch(0.85 0 0);
+  --ring: oklch(0.75 0.16 85);
 }
 
 @layer base {
@@ -158,7 +158,7 @@
 
 /* Gradient text */
 .gradient-text {
-  background: linear-gradient(135deg, oklch(0.72 0.19 145), oklch(0.75 0.16 75));
+  background: linear-gradient(135deg, oklch(0.88 0.12 85), oklch(0.75 0.18 85));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -166,7 +166,7 @@
 
 /* Glow effect for primary elements */
 .glow-primary {
-  box-shadow: 0 0 20px oklch(0.72 0.19 145 / 20%), 0 0 40px oklch(0.72 0.19 145 / 10%);
+  box-shadow: 0 0 20px oklch(0.82 0.16 85 / 20%), 0 0 40px oklch(0.82 0.16 85 / 10%);
 }
 
 /* Subtle card hover lift */
@@ -201,7 +201,7 @@
 }
 
 .animated-border {
-  background: linear-gradient(135deg, oklch(0.72 0.19 145), oklch(0.75 0.16 75), oklch(0.65 0.20 280), oklch(0.72 0.19 145));
+  background: linear-gradient(135deg, oklch(0.88 0.12 85), oklch(0.75 0.18 85), oklch(0.95 0.15 95), oklch(0.88 0.12 85));
   background-size: 300% 300%;
   animation: gradient-shift 4s ease infinite;
 }
@@ -215,10 +215,10 @@
   line-height: 1.8;
 }
 .prose a {
-  color: oklch(0.72 0.19 145);
+  color: oklch(0.82 0.16 85);
   text-decoration: none;
-  border-bottom: 1px solid oklch(0.72 0.19 145 / 30%);
+  border-bottom: 1px solid oklch(0.82 0.16 85 / 30%);
 }
 .prose a:hover {
-  border-bottom-color: oklch(0.72 0.19 145);
+  border-bottom-color: oklch(0.82 0.16 85);
 }
