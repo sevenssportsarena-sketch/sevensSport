@@ -8,12 +8,17 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Missing postId" }, { status: 400 });
     }
 
-    // Connect to Prisma to update post view counts
+    // Connect to Prisma to update post view counts and insert a new view record
     const prisma = (await import('@/lib/prisma')).default;
-    await prisma.post.update({
-      where: { id: postId },
-      data: { views: { increment: 1 } }
-    });
+    await prisma.$transaction([
+      prisma.post.update({
+        where: { id: postId },
+        data: { views: { increment: 1 } }
+      }),
+      prisma.postView.create({
+        data: { post_id: postId }
+      })
+    ]);
 
     return NextResponse.json({ success: true, postId });
   } catch (error) {

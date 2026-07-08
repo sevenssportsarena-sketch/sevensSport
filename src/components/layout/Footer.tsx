@@ -16,7 +16,7 @@ export function Footer() {
                 <img src="/logo.jpeg" alt="SevensArena Logo" className="w-full h-full object-cover" />
               </div>
               <span className="font-extrabold tracking-tight text-xl">
-                SevensSports<span className="gradient-text">Arena</span>
+                Sevens Sports <span className="gradient-text">Arena</span>
               </span>
             </Link>
             <p className="text-sm text-muted-foreground leading-relaxed max-w-xs">

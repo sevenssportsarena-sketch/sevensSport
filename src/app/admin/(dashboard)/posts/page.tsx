@@ -1,6 +1,6 @@
 import prisma from "@/lib/prisma";
 import Link from "next/link";
-import { Edit, Trash, Plus } from "lucide-react";
+import { Edit, Trash, Plus, BarChart2 } from "lucide-react";
 import { deletePost } from "@/app/actions/posts";
 
 export default async function AdminPostsPage() {
@@ -60,7 +60,10 @@ export default async function AdminPostsPage() {
                     {new Date(post.created_at).toLocaleDateString()}
                   </td>
                   <td className="px-6 py-4 text-right space-x-3">
-                    <Link href={`/admin/posts/${post.id}/edit`} className="inline-flex items-center text-blue-500 hover:text-blue-600 transition-colors">
+                    <Link href={`/admin/posts/${post.id}/analytics`} title="View Analytics" className="inline-flex items-center text-purple-500 hover:text-purple-600 transition-colors">
+                      <BarChart2 className="h-4 w-4" />
+                    </Link>
+                    <Link href={`/admin/posts/${post.id}/edit`} title="Edit Post" className="inline-flex items-center text-blue-500 hover:text-blue-600 transition-colors">
                       <Edit className="h-4 w-4" />
                     </Link>
                     <form action={async () => {

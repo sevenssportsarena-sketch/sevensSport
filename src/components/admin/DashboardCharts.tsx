@@ -12,14 +12,18 @@ import {
   Bar
 } from "recharts";
 
-const pageViewsData = [
-  { date: "Mon", views: 4000 },
-  { date: "Tue", views: 3000 },
-  { date: "Wed", views: 5000 },
-  { date: "Thu", views: 8780 },
-  { date: "Fri", views: 5890 },
-  { date: "Sat", views: 10230 },
-  { date: "Sun", views: 12400 },
+interface TrafficChartProps {
+  data?: { date: string; views: number }[];
+}
+
+const defaultPageViewsData = [
+  { date: "Mon", views: 0 },
+  { date: "Tue", views: 0 },
+  { date: "Wed", views: 0 },
+  { date: "Thu", views: 0 },
+  { date: "Fri", views: 0 },
+  { date: "Sat", views: 0 },
+  { date: "Sun", views: 0 },
 ];
 
 const adClicksData = [
@@ -28,12 +32,12 @@ const adClicksData = [
   { name: "Hero", clicks: 2400 },
 ];
 
-export function TrafficChart() {
+export function TrafficChart({ data = defaultPageViewsData }: TrafficChartProps) {
   return (
     <div className="h-[250px] w-full mt-4">
       <ResponsiveContainer width="100%" height="100%">
         <AreaChart
-          data={pageViewsData}
+          data={data}
           margin={{ top: 10, right: 10, left: -20, bottom: 0 }}
         >
           <defs>

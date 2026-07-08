@@ -20,6 +20,30 @@ export default async function AdminDashboard() {
     select: { title: true, views: true, slug: true }
   });
 
+  const viewsDataRaw = await prisma.$queryRaw<{ date: Date; views: number }[]>`
+    SELECT DATE(created_at) as date, CAST(COUNT(*) AS INTEGER) as views
+    FROM "PostView"
+    WHERE created_at >= current_date - interval '6 days'
+    GROUP BY DATE(created_at)
+    ORDER BY DATE(created_at) ASC;
+  `;
+
+  const viewsMap = new Map();
+  viewsDataRaw.forEach(row => {
+    const dateStr = new Date(row.date).toLocaleDateString('en-US', { weekday: 'short' });
+    viewsMap.set(dateStr, Number(row.views));
+  });
+
+  const chartData = Array.from({ length: 7 }).map((_, i) => {
+    const d = new Date();
+    d.setDate(d.getDate() - (6 - i));
+    const dayStr = d.toLocaleDateString('en-US', { weekday: 'short' });
+    return {
+      date: dayStr,
+      views: viewsMap.get(dayStr) || 0
+    };
+  });
+
   return (
     <div className="p-8 space-y-8">
       <div>
@@ -77,7 +101,7 @@ export default async function AdminDashboard() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div className="bg-card border rounded-xl p-6 shadow-sm min-h-[300px]">
           <h3 className="font-semibold mb-2">Weekly Traffic Sources</h3>
-          <TrafficChart />
+          <TrafficChart data={chartData} />
         </div>
         
         <div className="bg-card border rounded-xl p-6 shadow-sm min-h-[300px]">

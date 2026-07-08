@@ -39,7 +39,7 @@ export function Navbar() {
               <img src="/logo.jpeg" alt="SevensArena Logo" className="w-full h-full object-cover" />
             </div>
             <span className="font-extrabold tracking-tight text-xl">
-              SevensSports<span className="gradient-text">Arena</span>
+              Sevens Sports <span className="gradient-text">Arena</span>
             </span>
           </Link>
           <nav className="hidden md:flex items-center gap-1">
