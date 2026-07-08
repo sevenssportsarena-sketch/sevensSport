@@ -27,6 +27,42 @@ export async function generateStaticParams() {
   }
 }
 
+export async function generateMetadata({ params }: { params: Promise<{ category: string; slug: string }> }) {
+  const { slug } = await params;
+  const post = await prisma.post.findUnique({
+    where: { slug },
+    include: { category: true }
+  });
+
+  if (!post) {
+    return { title: 'Post Not Found' };
+  }
+
+  return {
+    title: post.title,
+    description: post.content.replace(/<[^>]*>?/gm, '').substring(0, 160) + '...',
+    openGraph: {
+      title: post.title,
+      description: post.content.replace(/<[^>]*>?/gm, '').substring(0, 160) + '...',
+      url: `https://sevenssportsarena.com.ng/${post.category.slug}/${post.slug}`,
+      images: post.cover_image_url ? [
+        {
+          url: post.cover_image_url,
+          width: 1200,
+          height: 630,
+          alt: post.title,
+        }
+      ] : [],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: post.title,
+      description: post.content.replace(/<[^>]*>?/gm, '').substring(0, 160) + '...',
+      images: post.cover_image_url ? [post.cover_image_url] : [],
+    },
+  };
+}
+
 export default async function ArticlePage({
   params,
 }: {

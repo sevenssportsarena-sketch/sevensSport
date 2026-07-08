@@ -35,6 +35,35 @@ export async function generateStaticParams() {
   }
 }
 
+export async function generateMetadata({ params }: { params: Promise<{ category: string }> }) {
+  const { category: categorySlug } = await params;
+  const categoryData = await prisma.category.findUnique({
+    where: { slug: categorySlug }
+  });
+
+  if (!categoryData) {
+    return { title: 'Category Not Found' };
+  }
+
+  const title = `${categoryData.name} News & Updates`;
+  const description = `The latest news, match reports, and analysis from the world of ${categoryData.name}.`;
+
+  return {
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      url: `https://sevenssportsarena.com.ng/${categoryData.slug}`,
+    },
+    twitter: {
+      card: 'summary',
+      title,
+      description,
+    },
+  };
+}
+
 export default async function CategoryPage({
   params,
 }: {

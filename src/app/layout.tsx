@@ -13,8 +13,28 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-  title: "Sevens Sports Arena – Live Sports News & Analysis",
+  metadataBase: new URL("https://sevenssportsarena.com.ng"),
+  title: {
+    default: "Sevens Sports Arena – Live Sports News & Analysis",
+    template: "%s | Sevens Sports Arena",
+  },
   description: "Your ultimate destination for real-time sports news, match reports, transfer rumours, and interactive discussions.",
+  keywords: ["Sports", "News", "European Football", "Nigerian Football", "NBA", "Athletics", "Formula 1", "Tennis"],
+  authors: [{ name: "SevensSportsArena" }],
+  creator: "SevensSportsArena",
+  openGraph: {
+    type: "website",
+    locale: "en_NG",
+    url: "https://sevenssportsarena.com.ng",
+    title: "Sevens Sports Arena – Live Sports News & Analysis",
+    description: "Your ultimate destination for real-time sports news, match reports, transfer rumours, and interactive discussions.",
+    siteName: "Sevens Sports Arena",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Sevens Sports Arena – Live Sports News & Analysis",
+    description: "Your ultimate destination for real-time sports news, match reports, transfer rumours, and interactive discussions.",
+  },
 };
 
 export default function RootLayout({
