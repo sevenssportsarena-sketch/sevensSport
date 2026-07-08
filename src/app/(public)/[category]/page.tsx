@@ -3,6 +3,7 @@ import { ArrowLeft, Clock, Grid } from "lucide-react";
 import { notFound } from "next/navigation";
 import { AdSlot } from "@/components/ads/AdSlot";
 import prisma from "@/lib/prisma";
+import { CategoryTracker } from "@/components/CategoryTracker";
 
 function formatTimeAgo(date: Date) {
   const seconds = Math.floor((new Date().getTime() - date.getTime()) / 1000);
@@ -59,6 +60,7 @@ export default async function CategoryPage({
 
   return (
     <div className="container mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8 space-y-12">
+      <CategoryTracker category={categorySlug} />
       {/* Page header */}
       <div className="space-y-6">
         <Link href="/" className="inline-flex items-center gap-2 text-sm font-medium text-muted-foreground hover:text-primary transition-colors group">

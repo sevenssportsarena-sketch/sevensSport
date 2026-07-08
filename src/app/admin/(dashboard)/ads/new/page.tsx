@@ -68,6 +68,17 @@ export default function NewAdPage() {
                 className="w-full bg-background border border-border rounded-lg px-3 py-2 text-sm outline-none focus:border-primary"
               />
             </div>
+
+            <div className="space-y-2">
+              <label className="text-sm font-medium">Tags (optional)</label>
+              <input
+                type="text"
+                name="tags"
+                placeholder="nba, football, premier-league"
+                className="w-full bg-background border border-border rounded-lg px-3 py-2 text-sm outline-none focus:border-primary"
+              />
+              <p className="text-xs text-muted-foreground">Comma-separated tags for behavioral targeting. Example: nba, premier-league</p>
+            </div>
           </div>
 
           {/* Placement & Status */}

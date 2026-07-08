@@ -7,6 +7,7 @@ import { CommentForm } from "@/components/interactive/CommentForm";
 import { BlockRenderer } from "@/components/public/BlockRenderer";
 import { AdSlot } from "@/components/ads/AdSlot";
 import { ViewTracker } from "@/components/analytics/ViewTracker";
+import { CategoryTracker } from "@/components/CategoryTracker";
 import prisma from "@/lib/prisma";
 
 export const revalidate = 60;
@@ -61,6 +62,7 @@ export default async function ArticlePage({
   return (
     <article className="min-h-screen">
       <ViewTracker postId={post.id} />
+      <CategoryTracker category={categorySlug} />
       {/* ── Fixed mobile interaction strip ─────────────────────── */}
       <div className="lg:hidden fixed left-0 top-1/2 -translate-y-1/2 z-40 flex flex-col items-center gap-1.5 py-3 px-1.5 bg-background/90 backdrop-blur-md border border-border/60 rounded-r-2xl shadow-xl">
         <ReactionModule
@@ -117,7 +119,7 @@ export default async function ArticlePage({
                   <img src="https://ui-avatars.com/api/?name=SA&background=1a1a2e&color=4ade80&bold=true&size=40" alt="Author" className="h-full w-full object-cover" />
                 </div>
                 <div className="flex flex-col">
-                  <span className="text-foreground font-semibold text-sm">SevensArena</span>
+                  <span className="text-foreground font-semibold text-sm">SevensSportsArena</span>
                   <time dateTime={post.created_at.toISOString()} className="text-xs text-muted-foreground">{post.created_at.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</time>
                 </div>
               </div>
@@ -163,12 +165,12 @@ export default async function ArticlePage({
             prose-img:rounded-2xl prose-img:shadow-xl
             prose-blockquote:border-l-primary prose-blockquote:bg-card prose-blockquote:rounded-r-xl prose-blockquote:py-1 prose-blockquote:px-6
             prose-code:text-primary prose-code:bg-card prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded-md prose-code:text-sm
+            [&_*]:!font-sans
           ">
-            <BlockRenderer content={post.content} />
-          </div>
-
-          <div className="my-12">
-            <AdSlot placement="inline_post" />
+            <BlockRenderer 
+              content={post.content} 
+              adNode={<AdSlot placement="inline_post" />}
+            />
           </div>
 
 

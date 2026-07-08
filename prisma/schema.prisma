@@ -95,6 +95,7 @@ model Ad {
   title        String
   image_url    String
   target_url   String
+  tags         String[]      @default([])
   placements   AdPlacement[]
   status       AdStatus      @default(active)
   start_date   DateTime?
@@ -147,4 +148,12 @@ model AppSetting {
   id    String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   key   String @unique
   value String
+}
+
+model SitePage {
+  id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  slug       String   @unique
+  title      String
+  content    String   @db.Text
+  updated_at DateTime @updatedAt
 }

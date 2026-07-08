@@ -49,12 +49,15 @@ export async function createAd(formData: FormData) {
   const status = (formData.get("status") ?? "active") as AdStatus;
   const start_date = formData.get("start_date") as string | null;
   const end_date = formData.get("end_date") as string | null;
+  const tagsStr = formData.get("tags") as string | null;
+  const tags = tagsStr ? tagsStr.split(",").map(t => t.trim()).filter(Boolean) : [];
 
   await prisma.ad.create({
     data: {
       title,
       image_url,
       target_url,
+      tags,
       placements,
       status,
       start_date: start_date ? new Date(start_date) : null,
@@ -76,6 +79,8 @@ export async function updateAd(id: string, formData: FormData) {
   const status = formData.get("status") as AdStatus;
   const start_date = formData.get("start_date") as string | null;
   const end_date = formData.get("end_date") as string | null;
+  const tagsStr = formData.get("tags") as string | null;
+  const tags = tagsStr ? tagsStr.split(",").map(t => t.trim()).filter(Boolean) : [];
 
   await prisma.ad.update({
     where: { id },
@@ -83,6 +88,7 @@ export async function updateAd(id: string, formData: FormData) {
       title,
       image_url,
       target_url,
+      tags,
       placements,
       status,
       start_date: start_date ? new Date(start_date) : null,

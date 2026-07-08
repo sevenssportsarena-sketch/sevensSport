@@ -240,9 +240,9 @@ export default async function HomePage() {
             <div className="absolute inset-0 bg-gradient-to-t from-background via-background/80 to-background/40" />
             <div className="relative z-10 text-center px-4">
               <div className="glass rounded-3xl p-12 max-w-md mx-auto border border-border/50">
-                <Zap className="h-12 w-12 text-primary mx-auto mb-4 glow-primary" />
-                <h1 className="text-2xl font-black mb-3">Welcome to SevensArena</h1>
-                <p className="text-muted-foreground text-sm mb-6">
+                <div className="flex flex-col justify-center text-center items-center h-full text-white">
+                <h1 className="text-2xl font-black mb-3">Welcome to SevensSportsArena</h1>
+                <p className="text-sm text-gray-300 opacity-90 max-w-[250px]">
                   The home of premium sports coverage. Publish your first featured article to transform this section.
                 </p>
                 <Link
@@ -253,6 +253,7 @@ export default async function HomePage() {
                 </Link>
               </div>
             </div>
+          </div>
           </div>
         )}
       </section>

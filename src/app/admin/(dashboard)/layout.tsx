@@ -1,4 +1,4 @@
-import { ShieldCheck, LayoutDashboard, FileText, MessageSquare, LogOut, Megaphone } from "lucide-react";
+import { ShieldCheck, LayoutDashboard, FileText, MessageSquare, LogOut, Megaphone, Globe, ChevronDown } from "lucide-react";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createClient } from "@/utils/supabase/server";
@@ -68,6 +68,28 @@ export default async function AdminLayout({
               <Megaphone className="h-4 w-4 mr-3" />
               Ads Management
             </Link>
+            
+            <details className="group pt-2">
+              <summary className="flex items-center justify-between px-3 py-2 text-sm font-medium rounded-lg text-muted-foreground hover:text-foreground hover:bg-accent transition-colors cursor-pointer list-none [&::-webkit-details-marker]:hidden">
+                <div className="flex items-center">
+                  <Globe className="h-4 w-4 mr-3" />
+                  Site Content
+                </div>
+                <ChevronDown className="h-4 w-4 opacity-50 transition-transform group-open:rotate-180" />
+              </summary>
+              <div className="mt-1 space-y-1 pl-7">
+                {['about', 'privacy', 'terms', 'cookies', 'advertise', 'contact'].map(slug => (
+                  <Link 
+                    key={slug} 
+                    href={`/admin/pages/${slug}`} 
+                    className="flex items-center px-3 py-2 text-sm font-medium rounded-lg text-muted-foreground hover:text-foreground hover:bg-accent transition-colors capitalize"
+                  >
+                    <FileText className="h-4 w-4 mr-3 opacity-50" />
+                    {slug}
+                  </Link>
+                ))}
+              </div>
+            </details>
           </nav>
           <div className="p-4 border-t">
             <div className="flex items-center gap-3 px-3 py-2 mb-2">

@@ -9,8 +9,12 @@ import { useRouter } from "next/navigation";
 
 const navLinks = [
   { href: "/european-football", label: "European Football" },
+  { href: "/champions-league", label: "Champions League" },
   { href: "/nigerian-football", label: "Nigerian Football" },
   { href: "/nba", label: "NBA" },
+  { href: "/athletics", label: "Athletics" },
+  // { href: "/tennis", label: "Tennis" },
+  { href: "/boxing", label: "Boxing" },
 ];
 
 export function Navbar() {
@@ -35,7 +39,7 @@ export function Navbar() {
               <img src="/logo.jpeg" alt="SevensArena Logo" className="w-full h-full object-cover" />
             </div>
             <span className="font-extrabold tracking-tight text-xl">
-              Sevens<span className="gradient-text">Arena</span>
+              SevensSports<span className="gradient-text">Arena</span>
             </span>
           </Link>
           <nav className="hidden md:flex items-center gap-1">
