@@ -2,14 +2,20 @@ import { signup } from "@/app/actions/auth";
 import { Trophy, ShieldAlert, UserPlus } from "lucide-react";
 import prisma from "@/lib/prisma";
 import { redirect } from "next/navigation";
+import { createClient } from "@/utils/supabase/server";
 
 export default async function RegisterPage() {
-  const canRegisterSetting = await prisma.appSetting.findUnique({
-    where: { key: "canRegister" }
-  });
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
 
-  if (!canRegisterSetting || canRegisterSetting.value !== "true") {
-    redirect("/");
+  if (!user) {
+    const canRegisterSetting = await prisma.appSetting.findUnique({
+      where: { key: "canRegister" }
+    });
+
+    if (!canRegisterSetting || canRegisterSetting.value !== "true") {
+      redirect("/");
+    }
   }
 
   return (
