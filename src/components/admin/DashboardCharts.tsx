@@ -26,11 +26,7 @@ const defaultPageViewsData = [
   { date: "Sun", views: 0 },
 ];
 
-const adClicksData = [
-  { name: "Sidebar", clicks: 4000 },
-  { name: "Inline", clicks: 6000 },
-  { name: "Hero", clicks: 2400 },
-];
+
 
 export function TrafficChart({ data = defaultPageViewsData }: TrafficChartProps) {
   return (
@@ -59,12 +55,16 @@ export function TrafficChart({ data = defaultPageViewsData }: TrafficChartProps)
   );
 }
 
-export function AdPerformanceChart() {
+interface AdPerformanceChartProps {
+  data?: { name: string; clicks: number }[];
+}
+
+export function AdPerformanceChart({ data = [] }: AdPerformanceChartProps) {
   return (
     <div className="h-[250px] w-full mt-4">
       <ResponsiveContainer width="100%" height="100%">
         <BarChart
-          data={adClicksData}
+          data={data}
           margin={{ top: 10, right: 10, left: -20, bottom: 0 }}
         >
           <XAxis dataKey="name" stroke="#888888" fontSize={12} tickLine={false} axisLine={false} />

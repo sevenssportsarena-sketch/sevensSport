@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Menu, X, ShieldCheck, LayoutDashboard, FileText, MessageSquare, Megaphone, Globe, ChevronDown } from "lucide-react";
+import { Menu, X, ShieldCheck, LayoutDashboard, FileText, MessageSquare, Megaphone, Globe, ChevronDown, ExternalLink, UserPlus } from "lucide-react";
 import { usePathname } from "next/navigation";
 
 export default function MobileAdminNav({ userEmail, signOutNode }: { userEmail: string, signOutNode: React.ReactNode }) {
@@ -107,6 +107,16 @@ export default function MobileAdminNav({ userEmail, signOutNode }: { userEmail: 
             </nav>
 
             <div className="mt-4 pt-4 border-t">
+              <div className="px-2 mb-4 space-y-1">
+                <Link href="/" target="_blank" onClick={() => setIsOpen(false)} className="flex w-full items-center px-2 py-2 text-sm font-medium rounded-lg text-muted-foreground hover:text-foreground hover:bg-accent transition-colors">
+                  <ExternalLink className="h-4 w-4 mr-3" />
+                  Go to main site
+                </Link>
+                <Link href="/admin/register" onClick={() => setIsOpen(false)} className="flex w-full items-center px-2 py-2 text-sm font-medium rounded-lg text-muted-foreground hover:text-foreground hover:bg-accent transition-colors">
+                  <UserPlus className="h-4 w-4 mr-3" />
+                  Add a new admin
+                </Link>
+              </div>
               <div className="flex items-center gap-3 px-3 py-2 mb-2 bg-accent/50 rounded-xl">
                 <div className="h-10 w-10 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold">
                   {userEmail?.charAt(0).toUpperCase() || "A"}

@@ -1,4 +1,4 @@
-import { ShieldCheck, LayoutDashboard, FileText, MessageSquare, LogOut, Megaphone, Globe, ChevronDown } from "lucide-react";
+import { ShieldCheck, LayoutDashboard, FileText, MessageSquare, LogOut, Megaphone, Globe, ChevronDown, ExternalLink, UserPlus } from "lucide-react";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createClient } from "@/utils/supabase/server";
@@ -92,6 +92,16 @@ export default async function AdminLayout({
             </details>
           </nav>
           <div className="p-4 border-t">
+            <div className="mb-4 space-y-1">
+              <Link href="/" target="_blank" className="flex items-center px-3 py-2 text-sm font-medium rounded-lg text-muted-foreground hover:text-foreground hover:bg-accent transition-colors">
+                <ExternalLink className="h-4 w-4 mr-3" />
+                Go to main site
+              </Link>
+              <Link href="/admin/register" className="flex items-center px-3 py-2 text-sm font-medium rounded-lg text-muted-foreground hover:text-foreground hover:bg-accent transition-colors">
+                <UserPlus className="h-4 w-4 mr-3" />
+                Add a new admin
+              </Link>
+            </div>
             <div className="flex items-center gap-3 px-3 py-2 mb-2">
               <div className="h-8 w-8 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold">
                 {user.email?.charAt(0).toUpperCase()}

@@ -44,6 +44,31 @@ export default async function AdminDashboard() {
     };
   });
 
+  const adClicksRaw = await prisma.adAnalytics.groupBy({
+    by: ['placement'],
+    where: {
+      event_type: 'click',
+    },
+    _count: {
+      id: true,
+    },
+  });
+
+  const adClicksMap = {
+    'Hero Banner': 0,
+    'Sidebar': 0,
+    'Inline Post': 0,
+  };
+  
+  adClicksRaw.forEach(item => {
+    const name = item.placement.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+    if (name in adClicksMap) {
+      adClicksMap[name as keyof typeof adClicksMap] = item._count.id;
+    }
+  });
+
+  const adClicksData = Object.entries(adClicksMap).map(([name, clicks]) => ({ name, clicks }));
+
   return (
     <div className="p-8 space-y-8">
       <div>
@@ -106,7 +131,7 @@ export default async function AdminDashboard() {
         
         <div className="bg-card border rounded-xl p-6 shadow-sm min-h-[300px]">
           <h3 className="font-semibold mb-2">Ad Placement Performance (Clicks)</h3>
-          <AdPerformanceChart />
+          <AdPerformanceChart data={adClicksData} />
         </div>
       </div>
     </div>
