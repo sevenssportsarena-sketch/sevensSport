@@ -19,10 +19,11 @@ const CATEGORY_IMAGES: Record<string, string> = {
 
 const FALLBACK_IMAGE = "https://picsum.photos/seed/sports_hero/1600/900";
 
-function getImage(post: { cover_image_url: string | null; category: { slug: string } }) {
+function getImage(post: { cover_image_url: string | null; categories: { slug: string }[] }) {
+  const categorySlug = post.categories?.[0]?.slug || "";
   return (
     post.cover_image_url ||
-    CATEGORY_IMAGES[post.category.slug] ||
+    CATEGORY_IMAGES[categorySlug] ||
     FALLBACK_IMAGE
   );
 }
@@ -56,7 +57,7 @@ export default async function SearchPage({
           { content: { contains: query, mode: "insensitive" } },
         ],
       },
-      include: { category: true },
+      include: { categories: true },
       orderBy: { created_at: "desc" },
     });
   }
@@ -90,7 +91,7 @@ export default async function SearchPage({
               key={post.id}
               className="group relative glass rounded-2xl overflow-hidden card-hover"
             >
-              <Link href={`/${post.category.slug}/${post.slug}`} className="block overflow-hidden">
+              <Link href={`/${post.categories[0]?.slug}/${post.slug}`} className="block overflow-hidden">
                 <img
                   src={getImage(post)}
                   alt={post.title}
@@ -101,9 +102,9 @@ export default async function SearchPage({
 
               <div className="p-5 space-y-3">
                 <div className="flex items-center justify-between">
-                  <Link href={`/${post.category.slug}`}>
+                  <Link href={`/${post.categories[0]?.slug}`}>
                     <span className="text-[11px] font-bold text-primary uppercase tracking-widest hover:text-primary/80 transition-colors">
-                      {post.category.name}
+                      {post.categories[0]?.name}
                     </span>
                   </Link>
                   <span className="flex items-center gap-1 text-[11px] text-muted-foreground">
@@ -111,7 +112,7 @@ export default async function SearchPage({
                     {formatTimeAgo(post.created_at)}
                   </span>
                 </div>
-                <Link href={`/${post.category.slug}/${post.slug}`} className="block">
+                <Link href={`/${post.categories[0]?.slug}/${post.slug}`} className="block">
                   <h3 className="font-bold text-[15px] leading-snug line-clamp-2 group-hover:text-primary transition-colors duration-200">
                     {post.title}
                   </h3>

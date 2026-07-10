@@ -15,7 +15,7 @@ export async function createPost(formData: FormData, content: string) {
 
   const title = formData.get("title") as string;
   const slug = formData.get("slug") as string;
-  const category_id = formData.get("category_id") as string;
+  const category_ids = formData.getAll("category_id") as string[];
   const status = formData.get("status") as "draft" | "published";
 
   await prisma.post.create({
@@ -23,7 +23,7 @@ export async function createPost(formData: FormData, content: string) {
       title,
       slug,
       content,
-      category_id,
+      categories: { connect: category_ids.map(id => ({ id })) },
       status,
       author_id: user.id,
       is_featured: formData.get("is_featured") === "on",
@@ -46,7 +46,7 @@ export async function updatePost(id: string, formData: FormData, content: string
 
   const title = formData.get("title") as string;
   const slug = formData.get("slug") as string;
-  const category_id = formData.get("category_id") as string;
+  const category_ids = formData.getAll("category_id") as string[];
   const status = formData.get("status") as "draft" | "published";
 
   await prisma.post.update({
@@ -55,7 +55,7 @@ export async function updatePost(id: string, formData: FormData, content: string
       title,
       slug,
       content,
-      category_id,
+      categories: { set: category_ids.map(id => ({ id })) },
       status,
       is_featured: formData.get("is_featured") === "on",
       cover_image_url: formData.get("cover_image_url") as string || null,

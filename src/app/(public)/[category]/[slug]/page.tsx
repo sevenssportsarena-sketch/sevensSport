@@ -9,29 +9,32 @@ import { AdSlot } from "@/components/ads/AdSlot";
 import { ViewTracker } from "@/components/analytics/ViewTracker";
 import { CategoryTracker } from "@/components/CategoryTracker";
 import prisma from "@/lib/prisma";
+import { getExcerpt } from "@/lib/utils";
 
 export const revalidate = 60;
 
 export async function generateStaticParams() {
   try {
     const posts = await prisma.post.findMany({
-      include: { category: true },
+      include: { categories: true },
       where: { status: 'published' }
     });
-    return posts.map((post: any) => ({
-      category: post.category.slug,
-      slug: post.slug,
-    }));
+    return posts.flatMap((post: any) => 
+      post.categories.map((c: any) => ({
+        category: c.slug,
+        slug: post.slug,
+      }))
+    );
   } catch {
     return [];
   }
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ category: string; slug: string }> }) {
-  const { slug } = await params;
+  const { category, slug } = await params;
   const post = await prisma.post.findUnique({
     where: { slug },
-    include: { category: true }
+    include: { categories: true }
   });
 
   if (!post) {
@@ -40,11 +43,11 @@ export async function generateMetadata({ params }: { params: Promise<{ category:
 
   return {
     title: post.title,
-    description: post.content.replace(/<[^>]*>?/gm, '').substring(0, 160) + '...',
+    description: getExcerpt(post.content, 160),
     openGraph: {
       title: post.title,
-      description: post.content.replace(/<[^>]*>?/gm, '').substring(0, 160) + '...',
-      url: `https://sevenssportsarena.com.ng/${post.category.slug}/${post.slug}`,
+      description: getExcerpt(post.content, 160),
+      url: `https://sevenssportsarena.com.ng/${category}/${post.slug}`,
       images: post.cover_image_url ? [
         {
           url: post.cover_image_url,
@@ -57,7 +60,7 @@ export async function generateMetadata({ params }: { params: Promise<{ category:
     twitter: {
       card: 'summary_large_image',
       title: post.title,
-      description: post.content.replace(/<[^>]*>?/gm, '').substring(0, 160) + '...',
+      description: getExcerpt(post.content, 160),
       images: post.cover_image_url ? [post.cover_image_url] : [],
     },
   };
@@ -73,7 +76,7 @@ export default async function ArticlePage({
   const post = await prisma.post.findUnique({
     where: { slug: slug },
     include: {
-      category: true,
+      categories: true,
       reactions: true,
       comments: {
         where: { is_approved: true },
@@ -88,12 +91,13 @@ export default async function ArticlePage({
     }
   });
 
-  if (!post || post.category.slug !== categorySlug) {
+  if (!post || !post.categories.some((c: any) => c.slug === categorySlug)) {
     notFound();
   }
 
   const articleTitle = post.title;
-  const categoryTitle = post.category.name;
+  const currentCategory = post.categories.find((c: any) => c.slug === categorySlug) || post.categories[0];
+  const categoryTitle = currentCategory.name;
 
   return (
     <article className="min-h-screen">

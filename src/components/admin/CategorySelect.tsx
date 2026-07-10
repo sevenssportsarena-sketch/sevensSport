@@ -2,29 +2,24 @@
 
 import { useState, useTransition } from "react";
 import { createCategory } from "@/app/actions/categories";
-import { X, Plus, Loader2 } from "lucide-react";
+import { X, Plus, Loader2, Check } from "lucide-react";
 
 type Category = {
   id: string;
   name: string;
 };
 
-export default function CategorySelect({ initialCategories, defaultValue = "" }: { initialCategories: Category[], defaultValue?: string }) {
+export default function CategorySelect({ initialCategories, defaultValues = [] }: { initialCategories: Category[], defaultValues?: string[] }) {
   const [categories, setCategories] = useState<Category[]>(initialCategories);
-  const [selectedCategoryId, setSelectedCategoryId] = useState<string>(defaultValue);
+  const [selectedCategoryIds, setSelectedCategoryIds] = useState<string[]>(defaultValues);
   const [isPending, startTransition] = useTransition();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [newCategoryName, setNewCategoryName] = useState("");
 
-  const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const value = e.target.value;
-    if (value === "create_new") {
-      setIsModalOpen(true);
-      // Reset select to previous value so "create_new" doesn't stay selected
-      setSelectedCategoryId(selectedCategoryId);
-    } else {
-      setSelectedCategoryId(value);
-    }
+  const toggleCategory = (id: string) => {
+    setSelectedCategoryIds(prev => 
+      prev.includes(id) ? prev.filter(cId => cId !== id) : [...prev, id]
+    );
   };
 
   const handleCreateCategory = () => {
@@ -33,7 +28,7 @@ export default function CategorySelect({ initialCategories, defaultValue = "" }:
         try {
           const newCat = await createCategory(newCategoryName.trim());
           setCategories([...categories, newCat]);
-          setSelectedCategoryId(newCat.id);
+          setSelectedCategoryIds(prev => [...prev, newCat.id]);
           setIsModalOpen(false);
           setNewCategoryName("");
         } catch (error) {
@@ -45,24 +40,45 @@ export default function CategorySelect({ initialCategories, defaultValue = "" }:
   };
 
   return (
-    <>
-      <select 
-        name="category_id" 
-        required 
-        value={selectedCategoryId}
-        onChange={handleSelectChange}
-        disabled={isPending}
-        className="bg-background border border-border rounded-lg px-3 py-2 text-sm outline-none focus:border-primary disabled:opacity-50"
-      >
-        <option value="">Select Category...</option>
-        {categories.map(c => (
-          <option key={c.id} value={c.id}>{c.name}</option>
-        ))}
-        <option value="create_new" className="font-bold text-primary">+ Create new category</option>
-      </select>
+    <div className="space-y-3">
+      {/* Hidden inputs to pass to form submission */}
+      {selectedCategoryIds.map(id => (
+        <input key={id} type="hidden" name="category_id" value={id} />
+      ))}
+      {selectedCategoryIds.length === 0 && (
+        <input type="hidden" name="category_id" required /> // To trigger HTML5 validation if empty
+      )}
 
-      {/* Hidden input to ensure form submission works if disabled */}
-      {isPending && <input type="hidden" name="category_id" value={selectedCategoryId} />}
+      <div className="flex flex-wrap gap-2">
+        {categories.map(c => {
+          const isSelected = selectedCategoryIds.includes(c.id);
+          return (
+            <button
+              key={c.id}
+              type="button"
+              onClick={() => toggleCategory(c.id)}
+              disabled={isPending}
+              className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium transition-colors border ${
+                isSelected 
+                  ? "bg-primary/10 border-primary text-primary" 
+                  : "bg-background border-border text-muted-foreground hover:border-primary/50 hover:text-foreground"
+              } disabled:opacity-50`}
+            >
+              {isSelected && <Check className="h-3.5 w-3.5" />}
+              {c.name}
+            </button>
+          );
+        })}
+        <button
+          type="button"
+          onClick={() => setIsModalOpen(true)}
+          disabled={isPending}
+          className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full text-sm font-semibold border border-dashed border-primary/50 text-primary hover:bg-primary/5 transition-colors disabled:opacity-50"
+        >
+          <Plus className="h-3.5 w-3.5" />
+          Create New
+        </button>
+      </div>
 
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-background/80 backdrop-blur-sm">
@@ -117,6 +133,6 @@ export default function CategorySelect({ initialCategories, defaultValue = "" }:
           </div>
         </div>
       )}
-    </>
+    </div>
   );
 }

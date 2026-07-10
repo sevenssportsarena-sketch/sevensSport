@@ -10,7 +10,8 @@ export default async function EditPostPage({ params }: { params: Promise<{ id: s
   const { id } = await params;
   
   const post = await prisma.post.findUnique({
-    where: { id }
+    where: { id },
+    include: { categories: true }
   });
 
   if (!post) {
@@ -29,10 +30,6 @@ export default async function EditPostPage({ params }: { params: Promise<{ id: s
       <header className="h-16 border-b bg-card flex items-center justify-between px-8 shrink-0">
         <h1 className="text-xl font-bold tracking-tight">Edit Article</h1>
         <div className="flex items-center gap-3">
-          <button type="button" className="inline-flex items-center justify-center gap-2 rounded-lg border border-border bg-background px-4 py-2 text-sm font-semibold shadow-sm hover:bg-accent transition-colors">
-            <Eye className="h-4 w-4" />
-            Preview
-          </button>
           <button type="submit" className="inline-flex items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground shadow-sm hover:bg-primary/90 transition-colors">
             <Save className="h-4 w-4" />
             Save Changes
@@ -53,7 +50,7 @@ export default async function EditPostPage({ params }: { params: Promise<{ id: s
               className="w-full text-4xl md:text-5xl font-extrabold bg-transparent border-none outline-none placeholder:text-muted-foreground/50 focus:ring-0 px-0"
             />
             <div className="flex flex-wrap gap-4">
-              <CategorySelect initialCategories={categories} defaultValue={post.category_id} />
+              <CategorySelect initialCategories={categories} defaultValues={post.categories.map((c: any) => c.id)} />
               <select name="status" defaultValue={post.status} className="bg-background border border-border rounded-lg px-3 py-2 text-sm outline-none focus:border-primary">
                 <option value="draft">Draft</option>
                 <option value="published">Published</option>

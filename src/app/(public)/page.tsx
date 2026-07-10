@@ -39,10 +39,11 @@ const CATEGORY_IMAGES: Record<string, string> = {
 const FALLBACK_IMAGE = "https://picsum.photos/seed/sports_hero/1600/900";
 const CARD_FALLBACK  = "https://picsum.photos/seed/sports_card/800/500";
 
-function getImage(post: { cover_image_url: string | null; category: { slug: string } }) {
+function getImage(post: { cover_image_url: string | null; categories: { slug: string }[] }) {
+  const categorySlug = post.categories?.[0]?.slug || "";
   return (
     post.cover_image_url ||
-    CATEGORY_IMAGES[post.category.slug] ||
+    CATEGORY_IMAGES[categorySlug] ||
     FALLBACK_IMAGE
   );
 }
@@ -54,7 +55,7 @@ export default async function HomePage() {
   /* Fetch data */
   const featuredPost = await prisma.post.findFirst({
     where: { status: "published", is_featured: true },
-    include: { category: true },
+    include: { categories: true },
     orderBy: { created_at: "desc" },
   });
 
@@ -63,7 +64,7 @@ export default async function HomePage() {
       status: "published",
       ...(featuredPost ? { id: { not: featuredPost.id } } : {}),
     },
-    include: { category: true },
+    include: { categories: true },
     orderBy: { created_at: "desc" },
     take: 9,
   });
@@ -90,7 +91,7 @@ export default async function HomePage() {
                 (p: any, i: any) => (
                   <li key={i} className="flex shrink-0 items-center gap-2">
                     <span className="opacity-60">•</span>
-                    <Link href={`/${p.category.slug}/${p.slug}`} className="hover:underline">
+                    <Link href={`/${p.categories[0]?.slug}/${p.slug}`} className="hover:underline">
                       {p.title}
                     </Link>
                   </li>
@@ -122,16 +123,16 @@ export default async function HomePage() {
                   <span className="inline-flex items-center gap-1.5 rounded-full bg-primary px-3.5 py-1.5 text-[11px] font-black uppercase tracking-widest text-primary-foreground shadow-lg glow-primary">
                     <Flame className="h-3 w-3" /> Featured
                   </span>
-                  <Link href={`/${featuredPost.category.slug}`}>
+                  <Link href={`/${featuredPost.categories[0]?.slug}`}>
                     <span className="inline-flex items-center rounded-full border border-white/25 bg-white/10 px-3 py-1 text-[11px] font-bold text-white backdrop-blur-sm hover:border-primary/50 hover:bg-primary/20 transition-all">
-                      {featuredPost.category.name}
+                      {featuredPost.categories[0]?.name}
                     </span>
                   </Link>
                 </div>
 
                 {/* Bottom content */}
                 <div className="space-y-5 max-w-2xl">
-                  <Link href={`/${featuredPost.category.slug}/${featuredPost.slug}`}>
+                  <Link href={`/${featuredPost.categories[0]?.slug}/${featuredPost.slug}`}>
                     <h1 className="text-3xl sm:text-4xl md:text-5xl xl:text-6xl font-black tracking-tight leading-[1.05] text-white drop-shadow-xl hover:text-primary transition-colors duration-200">
                       {featuredPost.title}
                     </h1>
@@ -143,7 +144,7 @@ export default async function HomePage() {
 
                   <div className="flex flex-wrap items-center gap-4">
                     <Link
-                      href={`/${featuredPost.category.slug}/${featuredPost.slug}`}
+                      href={`/${featuredPost.categories[0]?.slug}/${featuredPost.slug}`}
                       className="inline-flex items-center gap-2 rounded-xl bg-primary px-6 py-3 text-sm font-black text-primary-foreground shadow-lg transition-all hover:scale-105 active:scale-95 glow-primary"
                     >
                       Read Story <ArrowRight className="h-4 w-4" />
@@ -179,7 +180,7 @@ export default async function HomePage() {
               {heroSidePosts.map((post: any) => (
                 <Link
                   key={post.id}
-                  href={`/${post.category.slug}/${post.slug}`}
+                  href={`/${post.categories[0]?.slug}/${post.slug}`}
                   className="group flex gap-3 p-4 sm:p-5 hover:bg-primary/5 transition-colors"
                 >
                   <div className="relative shrink-0 overflow-hidden rounded-xl w-20 h-20 sm:w-24 sm:h-24">
@@ -191,7 +192,7 @@ export default async function HomePage() {
                   </div>
                   <div className="flex flex-col justify-center gap-1.5 min-w-0">
                     <span className="text-[10px] font-black uppercase tracking-widest text-primary">
-                      {post.category.name}
+                      {post.categories[0]?.name}
                     </span>
                     <h3 className="text-sm font-bold leading-snug line-clamp-3 group-hover:text-primary transition-colors">
                       {post.title}
@@ -291,7 +292,7 @@ export default async function HomePage() {
                 key={news.id}
                 className="group relative glass rounded-2xl overflow-hidden card-hover"
               >
-                <Link href={`/${news.category.slug}/${news.slug}`} className="block overflow-hidden">
+                <Link href={`/${news.categories[0]?.slug}/${news.slug}`} className="block overflow-hidden">
                   <img
                     src={getImage(news)}
                     alt={news.title}
@@ -302,9 +303,9 @@ export default async function HomePage() {
 
                 <div className="p-5 space-y-3">
                   <div className="flex items-center justify-between">
-                    <Link href={`/${news.category.slug}`}>
+                    <Link href={`/${news.categories[0]?.slug}`}>
                       <span className="text-[11px] font-bold text-primary uppercase tracking-widest hover:text-primary/80 transition-colors">
-                        {news.category.name}
+                        {news.categories[0]?.name}
                       </span>
                     </Link>
                     <span className="flex items-center gap-1 text-[11px] text-muted-foreground">
@@ -312,7 +313,7 @@ export default async function HomePage() {
                       {formatTimeAgo(news.created_at)}
                     </span>
                   </div>
-                  <Link href={`/${news.category.slug}/${news.slug}`} className="block">
+                  <Link href={`/${news.categories[0]?.slug}/${news.slug}`} className="block">
                     <h3 className="font-bold text-[15px] leading-snug line-clamp-2 group-hover:text-primary transition-colors duration-200">
                       {news.title}
                     </h3>

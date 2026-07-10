@@ -25,7 +25,7 @@ export default async function AllNewsPage() {
   const allNews = await prisma.post.findMany({
     where: { status: 'published' },
     orderBy: { created_at: 'desc' },
-    include: { category: true },
+    include: { categories: true },
     take: 24
   });
 
@@ -56,7 +56,7 @@ export default async function AllNewsPage() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {allNews.map((news: any) => (
             <article key={news.id} className="group relative glass rounded-2xl overflow-hidden card-hover">
-              <Link href={`/${news.category.slug}/${news.slug}`} className="block overflow-hidden">
+              <Link href={`/${news.categories[0]?.slug}/${news.slug}`} className="block overflow-hidden">
                 <img
                   src={news.cover_image_url || "https://images.unsplash.com/photo-1579952363873-27f3bade9f55?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80"}
                   alt={news.title}
@@ -65,9 +65,9 @@ export default async function AllNewsPage() {
               </Link>
               <div className="p-5 space-y-3">
                 <div className="flex items-center justify-between">
-                  <Link href={`/${news.category.slug}`}>
+                  <Link href={`/${news.categories[0]?.slug}`}>
                     <span className="text-[11px] font-bold text-primary uppercase tracking-widest hover:text-primary/80 transition-colors">
-                      {news.category.name}
+                      {news.categories[0]?.name}
                     </span>
                   </Link>
                   <span className="flex items-center gap-1 text-[11px] text-muted-foreground">
@@ -75,7 +75,7 @@ export default async function AllNewsPage() {
                     {formatTimeAgo(news.created_at)}
                   </span>
                 </div>
-                <Link href={`/${news.category.slug}/${news.slug}`} className="block">
+                <Link href={`/${news.categories[0]?.slug}/${news.slug}`} className="block">
                   <h3 className="font-bold text-[15px] leading-snug line-clamp-2 group-hover:text-primary transition-colors duration-200">
                     {news.title}
                   </h3>

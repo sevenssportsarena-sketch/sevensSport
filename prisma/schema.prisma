@@ -30,7 +30,6 @@ model Category {
 model Post {
   id              String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   author_id       String        @db.Uuid // Refers to Supabase auth.users
-  category_id     String        @db.Uuid
   title           String
   slug            String        @unique
   content         String        @db.Text
@@ -42,7 +41,7 @@ model Post {
   updated_at      DateTime      @updatedAt
   views           Int           @default(0)
   
-  category        Category      @relation(fields: [category_id], references: [id])
+  categories      Category[]
   post_tags       PostTag[]
   reactions       Reaction[]
   comments        Comment[]

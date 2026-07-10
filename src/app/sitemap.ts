@@ -8,19 +8,21 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   try {
     posts = await prisma.post.findMany({
       where: { status: 'published' },
-      include: { category: true },
+      include: { categories: true },
       orderBy: { created_at: 'desc' },
     });
   } catch (error) {
     console.error("Failed to fetch posts for sitemap", error);
   }
 
-  const postUrls = posts.map((post: any) => ({
-    url: `${baseUrl}/${post.category.slug}/${post.slug}`,
-    lastModified: post.updated_at,
-    changeFrequency: 'weekly' as const,
-    priority: 0.8,
-  }));
+  const postUrls = posts.flatMap((post: any) => 
+    post.categories.map((c: any) => ({
+      url: `${baseUrl}/${c.slug}/${post.slug}`,
+      lastModified: post.updated_at,
+      changeFrequency: 'weekly' as const,
+      priority: 0.8,
+    }))
+  );
 
   let categories:any = [];
   try {

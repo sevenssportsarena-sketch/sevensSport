@@ -1,13 +1,13 @@
 import prisma from "@/lib/prisma";
 import Link from "next/link";
-import { Edit, Trash, Plus, BarChart2 } from "lucide-react";
+import { Edit, Trash, Plus, BarChart2, Zap } from "lucide-react";
 import { deletePost } from "@/app/actions/posts";
 
 export default async function AdminPostsPage() {
   const posts = await prisma.post.findMany({
     orderBy: { created_at: "desc" },
     include: { 
-      category: true,
+      categories: true,
       _count: { select: { comments: true, reactions: true } }
     },
   });
@@ -19,13 +19,16 @@ export default async function AdminPostsPage() {
           <h1 className="text-3xl font-bold tracking-tight">Posts</h1>
           <p className="text-muted-foreground mt-1">Manage all your articles and content.</p>
         </div>
-        <Link 
-          href="/admin/posts/new" 
-          className="inline-flex items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground shadow-sm hover:bg-primary/90 transition-colors"
-        >
-          <Plus className="h-4 w-4" />
-          New Post
-        </Link>
+        <div className="flex items-center gap-4">
+
+          <Link 
+            href="/admin/posts/new" 
+            className="inline-flex items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground shadow-sm hover:bg-primary/90 transition-colors"
+          >
+            <Plus className="h-4 w-4" />
+            New Post
+          </Link>
+        </div>
       </div>
 
       <div className="bg-card border rounded-xl shadow-sm overflow-hidden">
@@ -45,7 +48,7 @@ export default async function AdminPostsPage() {
               {posts.map((post: any) => (
                 <tr key={post.id} className="hover:bg-muted/30 transition-colors">
                   <td className="px-6 py-4 font-medium">{post.title}</td>
-                  <td className="px-6 py-4">{post.category.name}</td>
+                  <td className="px-6 py-4">{post.categories.map((c: any) => c.name).join(', ')}</td>
                   <td className="px-6 py-4">
                     <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${post.status === 'published' ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'}`}>
                       {post.status}

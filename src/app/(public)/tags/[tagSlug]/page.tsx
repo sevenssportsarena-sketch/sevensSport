@@ -2,6 +2,7 @@ import Link from "next/link";
 import { ArrowLeft, Clock, Tag } from "lucide-react";
 import { notFound } from "next/navigation";
 import prisma from "@/lib/prisma";
+import { getExcerpt } from "@/lib/utils";
 
 // Helper function to format time ago
 function formatTimeAgo(date: Date) {
@@ -47,7 +48,7 @@ export default async function TagPage({
       post_tags: {
         include: {
           post: {
-            include: { category: true }
+            include: { categories: true }
           }
         },
         orderBy: {
@@ -89,7 +90,7 @@ export default async function TagPage({
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {tagNews.map((news: any) => (
             <article key={news.id} className="group relative flex flex-col space-y-4">
-              <Link href={`/${news.category.slug}/${news.slug}`} className="block overflow-hidden rounded-2xl">
+              <Link href={`/${news.categories[0]?.slug}/${news.slug}`} className="block overflow-hidden rounded-2xl">
                 <img
                   src={news.cover_image_url || "https://images.unsplash.com/photo-1579952363873-27f3bade9f55?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80"}
                   alt={news.title}
@@ -97,18 +98,18 @@ export default async function TagPage({
                 />
               </Link>
               <div className="flex flex-col flex-1">
-                <Link href={`/${news.category.slug}`}>
+                <Link href={`/${news.categories[0]?.slug}`}>
                   <span className="text-xs font-semibold text-primary uppercase tracking-wider hover:underline">
-                    {news.category.name}
+                    {news.categories[0]?.name}
                   </span>
                 </Link>
-                <Link href={`/${news.category.slug}/${news.slug}`} className="mt-2 block">
+                <Link href={`/${news.categories[0]?.slug}/${news.slug}`} className="mt-2 block">
                   <h3 className="text-xl font-bold leading-snug group-hover:text-primary transition-colors">
                     {news.title}
                   </h3>
                 </Link>
                 <p className="mt-2 text-sm text-muted-foreground line-clamp-2">
-                  {news.content.substring(0, 120)}...
+                  {getExcerpt(news.content, 120)}
                 </p>
                 <div className="mt-4 pt-4 flex items-center text-xs text-muted-foreground border-t border-border/50">
                   <Clock className="mr-1 h-3 w-3" />

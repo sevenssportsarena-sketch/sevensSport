@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { AdSlot } from "@/components/ads/AdSlot";
 import prisma from "@/lib/prisma";
 import { CategoryTracker } from "@/components/CategoryTracker";
+import { getExcerpt } from "@/lib/utils";
 
 function formatTimeAgo(date: Date) {
   const seconds = Math.floor((new Date().getTime() - date.getTime()) / 1000);
@@ -80,7 +81,7 @@ export default async function CategoryPage({
   }
 
   const categoryNews = await prisma.post.findMany({
-    where: { category_id: categoryData.id, status: 'published' },
+    where: { categories: { some: { id: categoryData.id } }, status: 'published' },
     orderBy: { created_at: 'desc' },
     take: 12
   });
@@ -136,7 +137,7 @@ export default async function CategoryPage({
                   </h3>
                 </Link>
                 <p className="text-xs text-muted-foreground line-clamp-2 leading-relaxed">
-                  {news.content.replace(/<[^>]*>?/gm, '').substring(0, 120)}...
+                  {getExcerpt(news.content, 120)}
                 </p>
               </div>
             </article>

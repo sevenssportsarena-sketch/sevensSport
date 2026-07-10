@@ -144,7 +144,7 @@ async function main() {
           content: item.post.content,
           status: item.post.status as any,
           is_featured: item.post.is_featured,
-          category_id: category.id,
+          categories: { connect: { id: category.id } },
           author_id: dummyAuthorId
         }
       })
