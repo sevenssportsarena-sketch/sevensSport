@@ -87,7 +87,7 @@ export default async function HomePage() {
               className="flex animate-[ticker_30s_linear_infinite] gap-12 whitespace-nowrap py-2 text-xs font-semibold"
               style={{ willChange: "transform" }}
             >
-              {(latestNews.length > 0 ? latestNews : []).concat(latestNews).map(
+              {(latestNews.length > 0 ? latestNews : []).map(
                 (p: any, i: any) => (
                   <li key={i} className="flex shrink-0 items-center gap-2">
                     <span className="opacity-60">•</span>

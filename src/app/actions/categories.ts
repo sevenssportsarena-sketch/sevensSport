@@ -27,3 +27,9 @@ export async function createCategory(name: string) {
 
   return category;
 }
+
+export async function deleteCategory(id: string) {
+  return await prisma.category.delete({
+    where: { id }
+  });
+}
