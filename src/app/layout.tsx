@@ -14,12 +14,25 @@ const poppins = Poppins({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://sevenssportsarena.com.ng"),
+  verification: {
+    google: "QYm5bV7CnC-K2avOaAzZE_8NCdkWYLiS8KxPMnlZK58",
+  },
   title: {
     default: "Sevens Sports Arena – Live Sports News & Analysis",
     template: "%s | Sevens Sports Arena",
   },
-  description: "Your ultimate destination for real-time sports news, match reports, transfer rumours, and interactive discussions.",
-  keywords: ["Sports", "News", "European Football", "Nigerian Football", "NBA", "Athletics", "Formula 1", "Tennis"],
+  description:
+    "Your ultimate destination for real-time sports news, match reports, transfer rumours, and interactive discussions.",
+  keywords: [
+    "Sports",
+    "News",
+    "European Football",
+    "Nigerian Football",
+    "NBA",
+    "Athletics",
+    "Formula 1",
+    "Tennis",
+  ],
   authors: [{ name: "SevensSportsArena" }],
   creator: "SevensSportsArena",
   openGraph: {
@@ -27,13 +40,15 @@ export const metadata: Metadata = {
     locale: "en_NG",
     url: "https://sevenssportsarena.com.ng",
     title: "Sevens Sports Arena – Live Sports News & Analysis",
-    description: "Your ultimate destination for real-time sports news, match reports, transfer rumours, and interactive discussions.",
+    description:
+      "Your ultimate destination for real-time sports news, match reports, transfer rumours, and interactive discussions.",
     siteName: "Sevens Sports Arena",
   },
   twitter: {
     card: "summary_large_image",
     title: "Sevens Sports Arena – Live Sports News & Analysis",
-    description: "Your ultimate destination for real-time sports news, match reports, transfer rumours, and interactive discussions.",
+    description:
+      "Your ultimate destination for real-time sports news, match reports, transfer rumours, and interactive discussions.",
   },
 };
 
