@@ -1,11 +1,11 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Plus, GripVertical, Trash2, ArrowUp, ArrowDown, Type, Heading, Image as ImageIcon, Quote } from "lucide-react";
+import { Plus, GripVertical, Trash2, ArrowUp, ArrowDown, Type, Heading, Image as ImageIcon, Quote, Table, PlusCircle, MinusCircle } from "lucide-react";
 import ImageUploader from "./ImageUploader";
 import InlineRichText from "./InlineRichText";
 
-export type BlockType = "paragraph" | "heading" | "image" | "quote";
+export type BlockType = "paragraph" | "heading" | "image" | "quote" | "table";
 
 export interface PostBlock {
   id: string;
@@ -16,6 +16,9 @@ export interface PostBlock {
   alt?: string;
   credit?: string;
   level?: 1 | 2 | 3;
+  // Table-specific
+  tableHeaders?: string[];   // column header labels
+  tableRows?: string[][];    // rows[rowIndex][colIndex]
 }
 
 interface BlockBuilderProps {
@@ -51,7 +54,10 @@ export default function BlockBuilder({ name, defaultValue }: BlockBuilderProps) 
   const addBlock = (type: BlockType, index: number) => {
     const newBlock: PostBlock = { id: crypto.randomUUID(), type, content: "" };
     if (type === "heading") newBlock.level = 2;
-    
+    if (type === "table") {
+      newBlock.tableHeaders = ["Column 1", "Column 2"];
+      newBlock.tableRows = [["Cell", "Cell"]];
+    }
     const newBlocks = [...blocks];
     newBlocks.splice(index + 1, 0, newBlock);
     setBlocks(newBlocks);
@@ -124,6 +130,7 @@ export default function BlockBuilder({ name, defaultValue }: BlockBuilderProps) 
                 <option value="heading">Heading</option>
                 <option value="image">Image</option>
                 <option value="quote">Quote</option>
+                <option value="table">Table</option>
               </select>
               <button 
                 type="button" 
@@ -211,6 +218,115 @@ export default function BlockBuilder({ name, defaultValue }: BlockBuilderProps) 
                   />
                 </div>
               )}
+
+              {block.type === "table" && (() => {
+                const headers = block.tableHeaders || ["Column 1"];
+                const rows = block.tableRows || [[""]];
+                const colCount = headers.length;
+
+                const updateHeader = (ci: number, val: string) => {
+                  const h = [...headers];
+                  h[ci] = val;
+                  updateBlock(block.id, { tableHeaders: h });
+                };
+
+                const addColumn = () => {
+                  if (colCount >= 5) return;
+                  updateBlock(block.id, {
+                    tableHeaders: [...headers, `Column ${colCount + 1}`],
+                    tableRows: rows.map(row => [...row, ""]),
+                  });
+                };
+
+                const removeColumn = () => {
+                  if (colCount <= 1) return;
+                  updateBlock(block.id, {
+                    tableHeaders: headers.slice(0, -1),
+                    tableRows: rows.map(row => row.slice(0, -1)),
+                  });
+                };
+
+                const addRow = () => {
+                  updateBlock(block.id, {
+                    tableRows: [...rows, Array(colCount).fill("")],
+                  });
+                };
+
+                const removeRow = (ri: number) => {
+                  if (rows.length <= 1) return;
+                  updateBlock(block.id, { tableRows: rows.filter((_, i) => i !== ri) });
+                };
+
+                const updateCell = (ri: number, ci: number, val: string) => {
+                  const r = rows.map(row => [...row]);
+                  r[ri][ci] = val;
+                  updateBlock(block.id, { tableRows: r });
+                };
+
+                return (
+                  <div className="space-y-3 pt-2">
+                    {/* Column controls */}
+                    <div className="flex items-center gap-3 mb-2">
+                      <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">{colCount} Column{colCount !== 1 ? 's' : ''} · {rows.length} Row{rows.length !== 1 ? 's' : ''}</span>
+                      <div className="flex items-center gap-1 ml-auto">
+                        <button type="button" onClick={addColumn} disabled={colCount >= 5} className="text-xs flex items-center gap-1 px-2 py-1 rounded-md bg-accent hover:bg-accent/80 transition disabled:opacity-40" title="Add column (max 5)">
+                          <PlusCircle className="h-3.5 w-3.5" /> Col
+                        </button>
+                        <button type="button" onClick={removeColumn} disabled={colCount <= 1} className="text-xs flex items-center gap-1 px-2 py-1 rounded-md bg-accent hover:bg-accent/80 transition disabled:opacity-40" title="Remove last column">
+                          <MinusCircle className="h-3.5 w-3.5" /> Col
+                        </button>
+                      </div>
+                    </div>
+
+                    {/* Table */}
+                    <div className="overflow-x-auto rounded-xl border border-border">
+                      <table className="w-full text-sm">
+                        <thead className="bg-muted/60">
+                          <tr>
+                            {headers.map((h, ci) => (
+                              <th key={ci} className="border-b border-border px-1 py-1">
+                                <input
+                                  value={h}
+                                  onChange={e => updateHeader(ci, e.target.value)}
+                                  className="w-full text-xs font-bold bg-transparent text-center outline-none px-2 py-1 rounded focus:bg-background transition-colors placeholder:text-muted-foreground"
+                                  placeholder={`Col ${ci + 1}`}
+                                />
+                              </th>
+                            ))}
+                            <th className="w-8 border-b border-border" />
+                          </tr>
+                        </thead>
+                        <tbody className="divide-y divide-border">
+                          {rows.map((row, ri) => (
+                            <tr key={ri} className="group/row hover:bg-accent/20 transition-colors">
+                              {row.map((cell, ci) => (
+                                <td key={ci} className="px-1 py-1 border-r border-border/50 last:border-r-0">
+                                  <input
+                                    value={cell}
+                                    onChange={e => updateCell(ri, ci, e.target.value)}
+                                    className="w-full text-xs bg-transparent text-center outline-none px-2 py-1.5 rounded focus:bg-background transition-colors"
+                                    placeholder="—"
+                                  />
+                                </td>
+                              ))}
+                              <td className="w-8 text-center">
+                                <button type="button" onClick={() => removeRow(ri)} disabled={rows.length <= 1} className="opacity-0 group-hover/row:opacity-100 transition-opacity p-1 text-destructive hover:bg-destructive/10 rounded disabled:opacity-20">
+                                  <Trash2 className="h-3 w-3" />
+                                </button>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+
+                    {/* Add row */}
+                    <button type="button" onClick={addRow} className="w-full flex items-center justify-center gap-1.5 text-xs font-medium text-muted-foreground hover:text-primary py-2 border border-dashed border-border hover:border-primary/50 rounded-xl transition-colors">
+                      <Plus className="h-3.5 w-3.5" /> Add Row
+                    </button>
+                  </div>
+                );
+              })()}
             </div>
 
             {/* Add Block Toolbar - Shown below active block */}
@@ -221,6 +337,7 @@ export default function BlockBuilder({ name, defaultValue }: BlockBuilderProps) 
                 <button type="button" onClick={() => addBlock("heading", index)} className="p-1.5 hover:bg-accent rounded-full text-muted-foreground hover:text-foreground transition-colors" title="Heading"><Heading className="h-4 w-4" /></button>
                 <button type="button" onClick={() => addBlock("image", index)} className="p-1.5 hover:bg-accent rounded-full text-muted-foreground hover:text-foreground transition-colors" title="Image"><ImageIcon className="h-4 w-4" /></button>
                 <button type="button" onClick={() => addBlock("quote", index)} className="p-1.5 hover:bg-accent rounded-full text-muted-foreground hover:text-foreground transition-colors" title="Quote"><Quote className="h-4 w-4" /></button>
+                <button type="button" onClick={() => addBlock("table", index)} className="p-1.5 hover:bg-accent rounded-full text-muted-foreground hover:text-foreground transition-colors" title="Table"><Table className="h-4 w-4" /></button>
               </div>
             </div>
           </div>

@@ -1,11 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import { Trophy, Search, Menu, Zap, X } from "lucide-react";
+import { Trophy, Search, Menu, Zap, X, ChevronDown, Calendar } from "lucide-react";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { useState } from "react";
 
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 
 const navLinks = [
   { href: "/european-football", label: "European Football" },
@@ -20,7 +20,9 @@ const navLinks = [
 export function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [footballOpen, setFootballOpen] = useState(false);
   const router = useRouter();
+  const pathname = usePathname();
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -43,6 +45,43 @@ export function Navbar() {
             </span>
           </Link>
           <nav className="hidden md:flex items-center gap-1">
+            {/* Football Dropdown */}
+            <div
+              className="relative"
+              onMouseEnter={() => setFootballOpen(true)}
+              onMouseLeave={() => setFootballOpen(false)}
+            >
+              <button
+                className={`relative flex items-center gap-1 px-3 py-2 text-sm font-medium transition-colors rounded-lg hover:bg-white/5 ${
+                  pathname?.startsWith("/football") || pathname?.startsWith("/match")
+                    ? "text-primary"
+                    : "text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                <Trophy className="h-3.5 w-3.5" />
+                Football
+                <ChevronDown className={`h-3.5 w-3.5 transition-transform ${footballOpen ? 'rotate-180' : ''}`} />
+              </button>
+              {footballOpen && (
+                <div className="absolute top-full left-0 mt-1 w-48 bg-background/95 backdrop-blur-md border border-border rounded-xl shadow-xl overflow-hidden z-50">
+                  <Link
+                    href="/football/fixtures"
+                    className="flex items-center gap-2.5 px-4 py-3 text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-accent transition-colors"
+                    onClick={() => setFootballOpen(false)}
+                  >
+                    <Calendar className="h-4 w-4" /> Fixtures &amp; Results
+                  </Link>
+                  <Link
+                    href="/football/standings"
+                    className="flex items-center gap-2.5 px-4 py-3 text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-accent transition-colors"
+                    onClick={() => setFootballOpen(false)}
+                  >
+                    <Trophy className="h-4 w-4" /> League Standings
+                  </Link>
+                </div>
+              )}
+            </div>
+
             {navLinks.map((link) => (
               <Link
                 key={link.href}
@@ -81,6 +120,27 @@ export function Navbar() {
         <div className="md:hidden border-t border-border bg-background/95 backdrop-blur-md">
           <div className="container mx-auto px-4 py-4 space-y-3">
             <nav className="flex flex-col space-y-1">
+              {/* Football section in mobile */}
+              <div className="px-3 py-1">
+                <p className="text-xs font-black uppercase tracking-widest text-muted-foreground mb-1 flex items-center gap-1.5">
+                  <Trophy className="h-3 w-3" /> Football
+                </p>
+                <Link
+                  href="/football/fixtures"
+                  className="flex items-center gap-2 px-2 py-2 text-sm font-medium text-muted-foreground hover:text-foreground rounded-lg hover:bg-white/5"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  <Calendar className="h-4 w-4" /> Fixtures &amp; Results
+                </Link>
+                <Link
+                  href="/football/standings"
+                  className="flex items-center gap-2 px-2 py-2 text-sm font-medium text-muted-foreground hover:text-foreground rounded-lg hover:bg-white/5"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  <Trophy className="h-4 w-4" /> League Standings
+                </Link>
+              </div>
+              <div className="border-t border-border/50 my-1" />
               {navLinks.map((link) => (
                 <Link
                   key={link.href}

@@ -3,6 +3,7 @@ import { ArrowLeft, Clock, Grid } from "lucide-react";
 import { AdSlot } from "@/components/ads/AdSlot";
 import prisma from "@/lib/prisma";
 import { getExcerpt } from "@/lib/utils";
+import { LoadMorePosts } from "@/components/LoadMorePosts";
 
 function formatTimeAgo(date: Date) {
   const seconds = Math.floor((new Date().getTime() - date.getTime()) / 1000);
@@ -95,11 +96,7 @@ export default async function AllNewsPage() {
       )}
 
       {allNews.length > 0 && (
-        <div className="flex justify-center">
-          <button className="rounded-full glass px-8 py-3 text-sm font-bold hover:bg-white/10 transition-all active:scale-95">
-            Load More
-          </button>
-        </div>
+        <LoadMorePosts initialSkip={24} />
       )}
     </div>
   );

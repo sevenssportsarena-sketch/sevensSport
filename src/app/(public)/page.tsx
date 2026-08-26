@@ -10,6 +10,7 @@ import {
 import { AdSlot } from "@/components/ads/AdSlot";
 import prisma from "@/lib/prisma";
 import { getExcerpt } from "@/lib/utils";
+import { LoadMorePosts } from "@/components/LoadMorePosts";
 
 /* ─── Helpers ────────────────────────────────────────────── */
 function formatTimeAgo(date: Date) {
@@ -331,15 +332,7 @@ export default async function HomePage() {
           </div>
         )}
 
-        <div className="mt-12 flex justify-center">
-          <Link
-            href="/news"
-            className="rounded-full glass px-8 py-3 text-sm font-bold hover:bg-white/10 transition-all active:scale-95 flex items-center gap-2 border border-border"
-          >
-            <TrendingUp className="h-4 w-4 text-primary" />
-            Load More Stories
-          </Link>
-        </div>
+        <LoadMorePosts initialSkip={9} />
       </section>
     </div>
   );

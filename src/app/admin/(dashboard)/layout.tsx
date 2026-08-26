@@ -1,4 +1,4 @@
-import { ShieldCheck, LayoutDashboard, FileText, MessageSquare, LogOut, Megaphone, Globe, ChevronDown, ExternalLink, UserPlus } from "lucide-react";
+import { ShieldCheck, LayoutDashboard, FileText, MessageSquare, LogOut, Megaphone, Globe, ChevronDown, ExternalLink, UserPlus, Trophy, Users, Calendar } from "lucide-react";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createClient } from "@/utils/supabase/server";
@@ -13,13 +13,17 @@ export default async function AdminLayout({
   const supabase = await createClient();
   let user = null;
   try {
-    const { data } = await supabase.auth.getUser();
-    user = data.user;
+    const { data, error } = await supabase.auth.getUser();
+    if (error) {
+      console.error("Supabase getUser error in layout.tsx:", error);
+    }
+    user = data?.user;
   } catch (error) {
-    // Graceful fallback
+    console.error("Supabase getUser exception in layout.tsx:", error);
   }
 
   if (!user) {
+    console.log("Redirecting to login because user is null. Path:", "unknown");
     redirect("/admin/login");
   }
 
@@ -68,6 +72,30 @@ export default async function AdminLayout({
               <Megaphone className="h-4 w-4 mr-3" />
               Ads Management
             </Link>
+
+            <details className="group pt-2">
+              <summary className="flex items-center justify-between px-3 py-2 text-sm font-medium rounded-lg text-muted-foreground hover:text-foreground hover:bg-accent transition-colors cursor-pointer list-none [&::-webkit-details-marker]:hidden">
+                <div className="flex items-center">
+                  <Trophy className="h-4 w-4 mr-3" />
+                  Football
+                </div>
+                <ChevronDown className="h-4 w-4 opacity-50 transition-transform group-open:rotate-180" />
+              </summary>
+              <div className="mt-1 space-y-1 pl-7">
+                <Link href="/admin/leagues" className="flex items-center px-3 py-2 text-sm font-medium rounded-lg text-muted-foreground hover:text-foreground hover:bg-accent transition-colors">
+                  <Trophy className="h-4 w-4 mr-3 opacity-50" />
+                  Leagues
+                </Link>
+                <Link href="/admin/teams" className="flex items-center px-3 py-2 text-sm font-medium rounded-lg text-muted-foreground hover:text-foreground hover:bg-accent transition-colors">
+                  <Users className="h-4 w-4 mr-3 opacity-50" />
+                  Teams
+                </Link>
+                <Link href="/admin/fixtures" className="flex items-center px-3 py-2 text-sm font-medium rounded-lg text-muted-foreground hover:text-foreground hover:bg-accent transition-colors">
+                  <Calendar className="h-4 w-4 mr-3 opacity-50" />
+                  Fixtures
+                </Link>
+              </div>
+            </details>
             
             <details className="group pt-2">
               <summary className="flex items-center justify-between px-3 py-2 text-sm font-medium rounded-lg text-muted-foreground hover:text-foreground hover:bg-accent transition-colors cursor-pointer list-none [&::-webkit-details-marker]:hidden">

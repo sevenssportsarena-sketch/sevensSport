@@ -79,6 +79,35 @@ export function BlockRenderer({ content, adNode }: BlockRendererProps) {
               />
             );
             break;
+
+          case "table": {
+            const headers = block.tableHeaders || [];
+            const rows = block.tableRows || [];
+            if (headers.length === 0) break;
+            renderedBlock = (
+              <div key={block.id} className="my-8 overflow-x-auto rounded-xl border border-border shadow-sm">
+                <table className="w-full text-sm text-left">
+                  <thead className="bg-muted/60 border-b border-border">
+                    <tr>
+                      {headers.map((h, ci) => (
+                        <th key={ci} className="px-4 py-3 font-bold text-foreground/80 uppercase text-xs tracking-wider">{h || `Col ${ci + 1}`}</th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-border/50">
+                    {rows.map((row, ri) => (
+                      <tr key={ri} className={`${ri % 2 === 0 ? 'bg-transparent' : 'bg-muted/20'} hover:bg-accent/30 transition-colors`}>
+                        {row.map((cell, ci) => (
+                          <td key={ci} className="px-4 py-3 text-foreground/90">{cell || '—'}</td>
+                        ))}
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            );
+            break;
+          }
             
           default:
             renderedBlock = null;

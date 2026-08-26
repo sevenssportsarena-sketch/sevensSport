@@ -3,6 +3,7 @@ import { ArrowLeft, Clock, Tag } from "lucide-react";
 import { notFound } from "next/navigation";
 import prisma from "@/lib/prisma";
 import { getExcerpt } from "@/lib/utils";
+import { LoadMorePosts } from "@/components/LoadMorePosts";
 
 // Helper function to format time ago
 function formatTimeAgo(date: Date) {
@@ -64,7 +65,8 @@ export default async function TagPage({
 
   const tagNews = tagData.post_tags
     .map((pt: any) => pt.post)
-    .filter((p: any) => p.status === 'published');
+    .filter((p: any) => p.status === 'published')
+    .slice(0, 12);
 
   const title = tagData.name;
 
@@ -125,12 +127,8 @@ export default async function TagPage({
         </div>
       )}
 
-      {tagNews.length > 0 && (
-        <div className="mt-12 flex justify-center">
-          <button className="rounded-full border border-border bg-background px-6 py-2.5 text-sm font-semibold shadow-sm hover:bg-accent transition-colors">
-            Load More Tagged Articles
-          </button>
-        </div>
+      {tagNews.length === 12 && (
+        <LoadMorePosts initialSkip={12} tagSlug={tagSlug} />
       )}
     </div>
   );
