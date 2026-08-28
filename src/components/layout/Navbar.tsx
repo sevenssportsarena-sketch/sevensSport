@@ -1,7 +1,15 @@
 "use client";
 
 import Link from "next/link";
-import { Trophy, Search, Menu, Zap, X, ChevronDown, Calendar } from "lucide-react";
+import {
+  Trophy,
+  Search,
+  Menu,
+  Zap,
+  X,
+  ChevronDown,
+  Calendar,
+} from "lucide-react";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { useState } from "react";
 
@@ -38,7 +46,11 @@ export function Navbar() {
         <div className="flex items-center gap-8">
           <Link href="/" className="flex items-center gap-2.5 group">
             <div className="flex h-9 w-9 items-center justify-center rounded-xl overflow-hidden transition-all duration-300 group-hover:scale-110">
-              <img src="/logo.jpeg" alt="SevensArena Logo" className="w-full h-full object-cover" />
+              <img
+                src="/logo.jpeg"
+                alt="SevensArena Logo"
+                className="w-full h-full object-cover"
+              />
             </div>
             <span className="font-extrabold tracking-tight text-xl">
               Sevens Sports <span className="gradient-text">Arena</span>
@@ -53,14 +65,17 @@ export function Navbar() {
             >
               <button
                 className={`relative flex items-center gap-1 px-3 py-2 text-sm font-medium transition-colors rounded-lg hover:bg-white/5 ${
-                  pathname?.startsWith("/football") || pathname?.startsWith("/match")
+                  pathname?.startsWith("/football") ||
+                  pathname?.startsWith("/match")
                     ? "text-primary"
                     : "text-muted-foreground hover:text-foreground"
                 }`}
               >
                 <Trophy className="h-3.5 w-3.5" />
                 Football
-                <ChevronDown className={`h-3.5 w-3.5 transition-transform ${footballOpen ? 'rotate-180' : ''}`} />
+                <ChevronDown
+                  className={`h-3.5 w-3.5 transition-transform ${footballOpen ? "rotate-180" : ""}`}
+                />
               </button>
               {footballOpen && (
                 <div className="absolute top-full left-0 mt-1 w-48 bg-background/95 backdrop-blur-md border border-border rounded-xl shadow-xl overflow-hidden z-50">
@@ -94,22 +109,29 @@ export function Navbar() {
           </nav>
         </div>
         <div className="flex items-center gap-2">
-          <form onSubmit={handleSearch} className="hidden sm:flex items-center relative transition-all">
+          <form
+            onSubmit={handleSearch}
+            className="flex items-center relative transition-all"
+          >
             <Search className="absolute left-2.5 h-4 w-4 text-muted-foreground" />
-            <input 
-              type="text" 
-              placeholder="Search..." 
+            <input
+              type="text"
+              placeholder="Search..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="h-9 pl-9 pr-4 rounded-lg bg-background border border-border text-sm focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all w-32 md:w-48 focus:w-40 md:focus:w-64 placeholder:text-muted-foreground"
+              className="h-9 pl-9 pr-4 rounded-lg bg-background border border-border text-sm focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all w-16 md:w-48 focus:w-40 md:focus:w-64 placeholder:text-muted-foreground"
             />
           </form>
           <ThemeToggle />
-          <button 
+          <button
             className="md:hidden h-9 w-9 rounded-lg flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-white/5 transition-all"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
           >
-            {isMobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            {isMobileMenuOpen ? (
+              <X className="h-5 w-5" />
+            ) : (
+              <Menu className="h-5 w-5" />
+            )}
             <span className="sr-only">Toggle menu</span>
           </button>
         </div>
@@ -152,8 +174,8 @@ export function Navbar() {
                 </Link>
               ))}
             </nav>
-            </div>
           </div>
+        </div>
       )}
     </header>
   );
