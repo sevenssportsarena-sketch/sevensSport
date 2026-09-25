@@ -4,6 +4,7 @@ import Script from "next/script";
 import "./globals.css";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { CookieConsent } from "@/components/CookieConsent";
+import { OneSignalComponent } from "@/components/OneSignal";
 
 const poppins = Poppins({
   variable: "--font-sans",
@@ -90,6 +91,7 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
+          <OneSignalComponent />
           {children}
           <CookieConsent />
         </ThemeProvider>
