@@ -9,6 +9,7 @@ export function OneSignalComponent() {
     if (typeof window !== 'undefined') {
       OneSignal.init({
         appId: 'a6d3840e-b5a5-4a3d-9d95-72f36ee32adb',
+        // @ts-expect-error - react-onesignal types require more fields than needed
         notifyButton: {
           enable: true,
         },
