@@ -51,6 +51,16 @@ export const metadata: Metadata = {
     description:
       "Your ultimate destination for real-time sports news, match reports, transfer rumours, and interactive discussions.",
   },
+  alternates: {
+    types: {
+      "application/rss+xml": [
+        {
+          url: "/feed.xml",
+          title: "Sevens Sports Arena – Live Sports News & Analysis RSS Feed",
+        },
+      ],
+    },
+  },
 };
 
 export default function RootLayout({

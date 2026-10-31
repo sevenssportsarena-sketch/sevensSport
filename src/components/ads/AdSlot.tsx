@@ -23,24 +23,29 @@ export async function AdSlot({ placement }: AdSlotProps) {
   }
 
   // 2. Fetch all active ads for this placement
-  const ads = await prisma.ad.findMany({
-    where: {
-      status: "active",
-      placements: { has: placement },
-      OR: [
-        { start_date: null },
-        { start_date: { lte: now } },
-      ],
-      AND: [
-        {
-          OR: [
-            { end_date: null },
-            { end_date: { gte: now } },
-          ],
-        },
-      ],
-    },
-  });
+  let ads: Awaited<ReturnType<typeof prisma.ad.findMany>> = [];
+  try {
+    ads = await prisma.ad.findMany({
+      where: {
+        status: "active",
+        placements: { has: placement },
+        OR: [
+          { start_date: null },
+          { start_date: { lte: now } },
+        ],
+        AND: [
+          {
+            OR: [
+              { end_date: null },
+              { end_date: { gte: now } },
+            ],
+          },
+        ],
+      },
+    });
+  } catch {
+    return null;
+  }
 
   if (!ads || ads.length === 0) return null;
 

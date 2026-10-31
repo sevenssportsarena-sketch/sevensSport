@@ -11,6 +11,7 @@ import { AdSlot } from "@/components/ads/AdSlot";
 import prisma from "@/lib/prisma";
 import { getExcerpt } from "@/lib/utils";
 import { LoadMorePosts } from "@/components/LoadMorePosts";
+import { PartnerNewsWidget } from "@/components/PartnerNewsWidget";
 
 /* ─── Helpers ────────────────────────────────────────────── */
 function formatTimeAgo(date: Date) {
@@ -53,22 +54,29 @@ function getImage(post: { cover_image_url: string | null; categories: { slug: st
 export const revalidate = 60;
 
 export default async function HomePage() {
-  /* Fetch data */
-  const featuredPost = await prisma.post.findFirst({
-    where: { status: "published", is_featured: true },
-    include: { categories: true },
-    orderBy: { created_at: "desc" },
-  });
+  /* Fetch data defensively in case the remote database is temporarily unreachable */
+  let featuredPost: any = null;
+  let latestNews: any[] = [];
 
-  const latestNews = await prisma.post.findMany({
-    where: {
-      status: "published",
-      ...(featuredPost ? { id: { not: featuredPost.id } } : {}),
-    },
-    include: { categories: true },
-    orderBy: { created_at: "desc" },
-    take: 9,
-  });
+  try {
+    featuredPost = await prisma.post.findFirst({
+      where: { status: "published", is_featured: true },
+      include: { categories: true },
+      orderBy: { created_at: "desc" },
+    });
+
+    latestNews = await prisma.post.findMany({
+      where: {
+        status: "published",
+        ...(featuredPost ? { id: { not: featuredPost.id } } : {}),
+      },
+      include: { categories: true },
+      orderBy: { created_at: "desc" },
+      take: 9,
+    });
+  } catch {
+    // Database temporarily unreachable; render fallback view gracefully without triggering Next.js error overlay
+  }
 
   const [heroSidePosts, gridPosts] = [latestNews.slice(0, 3), latestNews.slice(3)];
 
@@ -334,6 +342,11 @@ export default async function HomePage() {
 
         <LoadMorePosts initialSkip={9} />
       </section>
+
+      {/* ══════════════════════════════════════════════════════════
+          PARTNER WIRE — SPORT FLAMES
+      ══════════════════════════════════════════════════════════ */}
+      <PartnerNewsWidget limit={6} variant="grid" />
     </div>
   );
 }

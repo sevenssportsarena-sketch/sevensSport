@@ -39,9 +39,17 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: { params: Promise<{ category: string }> }) {
   const { category: categorySlug } = await params;
-  const categoryData = await prisma.category.findUnique({
-    where: { slug: categorySlug }
-  });
+  if (categorySlug.includes(".")) {
+    return { title: 'Not Found' };
+  }
+  let categoryData: any = null;
+  try {
+    categoryData = await prisma.category.findUnique({
+      where: { slug: categorySlug }
+    });
+  } catch {
+    return { title: 'Sports News & Updates' };
+  }
 
   if (!categoryData) {
     return { title: 'Category Not Found' };
@@ -72,20 +80,38 @@ export default async function CategoryPage({
   params: Promise<{ category: string }>;
 }) {
   const { category: categorySlug } = await params;
+  if (categorySlug.includes(".")) {
+    notFound();
+  }
 
-  const categoryData = await prisma.category.findUnique({
-    where: { slug: categorySlug }
-  });
+  let categoryData: any = null;
+  let categoryNews: any[] = [];
+
+  try {
+    categoryData = await prisma.category.findUnique({
+      where: { slug: categorySlug }
+    });
+
+    if (categoryData) {
+      categoryNews = await prisma.post.findMany({
+        where: { categories: { some: { id: categoryData.id } }, status: 'published' },
+        orderBy: { created_at: 'desc' },
+        take: 12
+      });
+    }
+  } catch {
+    categoryData = {
+      name: categorySlug
+        .split("-")
+        .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+        .join(" "),
+      slug: categorySlug,
+    };
+  }
 
   if (!categoryData) {
     notFound();
   }
-
-  const categoryNews = await prisma.post.findMany({
-    where: { categories: { some: { id: categoryData.id } }, status: 'published' },
-    orderBy: { created_at: 'desc' },
-    take: 12
-  });
 
   const title = categoryData.name;
 

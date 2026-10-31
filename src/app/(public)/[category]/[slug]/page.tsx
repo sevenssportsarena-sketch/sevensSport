@@ -10,6 +10,7 @@ import { ViewTracker } from "@/components/analytics/ViewTracker";
 import { CategoryTracker } from "@/components/CategoryTracker";
 import prisma from "@/lib/prisma";
 import { getExcerpt } from "@/lib/utils";
+import { PartnerNewsWidget } from "@/components/PartnerNewsWidget";
 
 export const revalidate = 60;
 
@@ -230,6 +231,11 @@ export default async function ArticlePage({
               ))}
             </div>
           )}
+
+          {/* Partner Wire Sidebar Widget */}
+          <div className="mt-12">
+            <PartnerNewsWidget limit={5} variant="sidebar" />
+          </div>
 
           {/* Comments Section */}
           <div className="mt-16 mb-8">
